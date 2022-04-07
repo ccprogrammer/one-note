@@ -6,12 +6,12 @@ import 'package:list_todo/widgets/custom_button.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class DescriptionPage extends StatefulWidget {
-  DescriptionPage({Key? key, required this.item, this.c}) : super(key: key);
+  DescriptionPage({Key? key, required this.item, this.controller}) : super(key: key);
 
   final dynamic item;
 
   // Controller
-  final dynamic c;
+  final dynamic controller;
 
   @override
   State<DescriptionPage> createState() => _DescriptionPageState();

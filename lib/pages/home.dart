@@ -9,6 +9,7 @@ import 'package:list_todo/widgets/custom_input_text.dart';
 import 'package:list_todo/widgets/note_tile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:page_transition/page_transition.dart';
 
 class AppHome extends StatefulWidget {
   AppHome({Key? key}) : super(key: key);
@@ -223,13 +224,26 @@ class _AppHomeState extends State<AppHome> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => DescriptionPage(
+                        PageTransition(
+                          type: PageTransitionType.bottomToTop,
+                          duration: Duration(milliseconds: 200),
+                          child: DescriptionPage(
                             item: c.noteList[i],
-                            c: this.c,
+                            controller: this.c,
                           ),
                         ),
                       );
+
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) => DescriptionPage(
+                      //       item: c.noteList[i],
+                      //       c: this.c,
+                      //     ),
+                      //   ),
+                      // );
+
                     },
                     deleteItem: (id) {
                       handleDeleteSet(id);

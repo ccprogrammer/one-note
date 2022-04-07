@@ -37,15 +37,26 @@ class _AppHomeState extends State<AppHome> {
 
   Future saveData() async {
     final SharedPreferences prefs = await _prefs;
+
+    // Tampung list note yang muncul di ui kedalam notes
     List notes = c.noteList;
+
+    // lalu simpan notes ke dalam localstorage dengan di encode terlebih dahulu
     prefs.setString('notes', jsonEncode(notes));
   }
 
   Future loadData() async {
     final SharedPreferences prefs = await _prefs;
+
+    // null check
     if (prefs.containsKey('notes')) {
+      // ambil list notes dari localstorage dan tampung kedalam noteList
       final noteList = prefs.getString('notes');
+
+      // lalu noteList di decode dan di simpan kedalam notes lalu notes akan berupa jadi list
       final notes = jsonDecode(noteList!);
+
+      // notes di looping dan item di dalamnya di masukan kedalam c.noteList yang akan muncul di ui, notes[i] adalah itemnya
       for (var i = 0; i < notes.length; i++) {
         c.noteList.add(notes[i]);
         setState(() {});
@@ -55,7 +66,11 @@ class _AppHomeState extends State<AppHome> {
 
   Future deleteData() async {
     final SharedPreferences prefs = await _prefs;
+
+    // semua key di hapus
     prefs.clear();
+
+    // setelah di hapus akan di simpan kembail data ke localstorage, jadi di penyimpanan sementara/c.noteList itemnya terhapus lalu c.noteList yang sudah terhapus itemnya tadi akan di simpan kembali ke localstorage
     saveData();
   }
 
@@ -177,30 +192,6 @@ class _AppHomeState extends State<AppHome> {
         return this.exit;
       },
       child: Scaffold(
-        floatingActionButton: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            // FloatingActionButton(
-            //   child: Icon(Icons.save),
-            //   onPressed: () {
-            //     saveData();
-            //   },
-            // ),
-            // FloatingActionButton(
-            //   child: Icon(Icons.download),
-            //   onPressed: () {
-            //     loadData();
-            //   },
-            // ),
-            FloatingActionButton(
-              child: Icon(Icons.clear),
-              onPressed: () async {
-                final SharedPreferences prefs = await _prefs;
-                prefs.clear();
-              },
-            ),
-          ],
-        ),
         backgroundColor: Color(0xff121212),
         appBar: AppBar(
           centerTitle: true,

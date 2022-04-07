@@ -5,8 +5,8 @@ import 'package:list_todo/widgets/custom_button.dart';
 
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-class TodoDescription extends StatefulWidget {
-  TodoDescription({Key? key, required this.item, this.c}) : super(key: key);
+class DescriptionPage extends StatefulWidget {
+  DescriptionPage({Key? key, required this.item, this.c}) : super(key: key);
 
   final dynamic item;
 
@@ -14,10 +14,10 @@ class TodoDescription extends StatefulWidget {
   final dynamic c;
 
   @override
-  State<TodoDescription> createState() => _TodoDescriptionState();
+  State<DescriptionPage> createState() => _DescriptionPageState();
 }
 
-class _TodoDescriptionState extends State<TodoDescription> {
+class _DescriptionPageState extends State<DescriptionPage> {
   final _panelC = PanelController();
   final textAddController = TextEditingController();
 
@@ -34,7 +34,7 @@ class _TodoDescriptionState extends State<TodoDescription> {
         centerTitle: true,
         backgroundColor: Color(0xff121212),
         title: Text(
-          widget.item['todo'],
+          widget.item['note'],
           style: TextStyle(
             fontSize: 20,
           ),

@@ -1,16 +1,16 @@
-class TodoControler {
+class NoteControler {
   // SET CONTROLLER
   var noteList = [];
 
-  void addTodo(id, todo, description) {
+  void addNote(id, note, description) {
     noteList.add({
       'id': id,
-      'todo': todo,
+      'note': note,
       'description': description,
     });
   }
 
-  void deleteTodo(id) {
+  void deleteNote(id) {
     noteList.removeWhere((element) => element['id'] == id);
   }
 }

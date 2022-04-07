@@ -2,11 +2,11 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:list_todo/controllers/todo_controller.dart';
+import 'package:list_todo/controllers/note_controller.dart';
 import 'package:list_todo/pages/description_page.dart';
 import 'package:list_todo/widgets/custom_button.dart';
 import 'package:list_todo/widgets/custom_input_text.dart';
-import 'package:list_todo/widgets/todo_tile.dart';
+import 'package:list_todo/widgets/note_tile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -22,10 +22,10 @@ class _AppHomeState extends State<AppHome> {
   bool exit = false;
 
   // Controller
-  final c = TodoControler();
+  final c = NoteControler();
   final _panelC = PanelController();
-  final textTodoName = TextEditingController();
-  final textTodoDesc = TextEditingController();
+  final textNoteName = TextEditingController();
+  final textNoteDesc = TextEditingController();
 
   @override
   void initState() {
@@ -86,10 +86,10 @@ class _AppHomeState extends State<AppHome> {
   }
 
   void handleAdd() {
-    c.addTodo(
+    c.addNote(
       Random().nextInt(100),
-      textTodoName.text,
-      textTodoDesc.text,
+      textNoteName.text,
+      textNoteDesc.text,
     );
     saveData();
     _panelC.close();
@@ -103,8 +103,8 @@ class _AppHomeState extends State<AppHome> {
   }
 
   void clearTextField() {
-    textTodoName.text = '';
-    textTodoDesc.text = '';
+    textNoteName.text = '';
+    textNoteDesc.text = '';
   }
 
   void handleCancel() {
@@ -112,7 +112,7 @@ class _AppHomeState extends State<AppHome> {
   }
 
   void handleDeleteSet(id) {
-    c.deleteTodo(id);
+    c.deleteNote(id);
     deleteData();
     setState(() {});
   }
@@ -143,7 +143,7 @@ class _AppHomeState extends State<AppHome> {
               },
               expandField: false,
               title: 'Note',
-              controller: textTodoName,
+              controller: textNoteName,
             ),
             CustomInputText(
               onPressed: () {
@@ -151,7 +151,7 @@ class _AppHomeState extends State<AppHome> {
               },
               expandField: true,
               title: 'Description',
-              controller: textTodoDesc,
+              controller: textNoteDesc,
             ),
             Spacer(),
             Container(
@@ -217,14 +217,14 @@ class _AppHomeState extends State<AppHome> {
             body: ListView(
               children: [
                 for (var i = 0; i < c.noteList.length; i++)
-                  TodoTile(
+                  NoteTile(
                     index: i + 1,
                     item: c.noteList[i],
                     onPressed: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => TodoDescription(
+                          builder: (context) => DescriptionPage(
                             item: c.noteList[i],
                             c: this.c,
                           ),

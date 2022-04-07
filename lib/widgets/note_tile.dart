@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class TodoTile extends StatefulWidget {
-  const TodoTile({
+class NoteTile extends StatefulWidget {
+  const NoteTile({
     Key? key,
     required this.item,
     required this.deleteItem,
@@ -14,10 +14,10 @@ class TodoTile extends StatefulWidget {
   final Function deleteItem;
 
   @override
-  State<TodoTile> createState() => _SetsTileState();
+  State<NoteTile> createState() => _NoteTileState();
 }
 
-class _SetsTileState extends State<TodoTile> {
+class _NoteTileState extends State<NoteTile> {
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
@@ -40,30 +40,10 @@ class _SetsTileState extends State<TodoTile> {
             padding: EdgeInsets.fromLTRB(6, 0, 6, 0),
             child: Row(
               children: [
-                Container(
-                  padding: EdgeInsets.fromLTRB(8, 8, 8, 8),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: Colors.white,
-                    ),
-                  ),
-                  child: Center(
-                    child: Text(
-                      '${widget.index}',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-
-                // Title
-                SizedBox(width: 16),
+                // Note
                 Expanded(
                   child: Text(
-                    widget.item['todo'] ?? 'Empty Error',
+                    widget.item['note'] ?? 'Empty Error',
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                     style: TextStyle(

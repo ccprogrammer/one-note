@@ -18,6 +18,7 @@ class AppHome extends StatefulWidget {
 }
 
 class _AppHomeState extends State<AppHome> {
+  // jika panelIsOpen/true ketika klik kembali pada button hp akan menjalankan function _panel.close()/tutup panel jika false akan kembail ke halaman sebelumnya
   bool exit = false;
 
   // Controller
@@ -79,6 +80,7 @@ class _AppHomeState extends State<AppHome> {
     if (_panelC.isPanelOpen) {
       _panelC.close();
     } else {
+      // ketika panel terbuka panel akan di tutup, ketika panel tertutup this.exit akan menjadi true dan secara otomatis akan kembail ke halaman sebelumnya
       this.exit = true;
     }
   }

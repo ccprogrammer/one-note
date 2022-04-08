@@ -25,8 +25,8 @@ class _AppHomeState extends State<AppHome> {
   // Controller
   final c = NoteControler();
   final _panelC = PanelController();
-  final textNoteName = TextEditingController();
-  final textNoteDesc = TextEditingController();
+  final textNote = TextEditingController();
+  final textDesc = TextEditingController();
 
   @override
   void initState() {
@@ -40,25 +40,19 @@ class _AppHomeState extends State<AppHome> {
   Future saveData() async {
     final SharedPreferences prefs = await _prefs;
 
-    // Tampung list note yang muncul di ui kedalam notes
     List notes = c.noteList;
 
-    // lalu simpan notes ke dalam localstorage dengan di encode terlebih dahulu
     prefs.setString('notes', jsonEncode(notes));
   }
 
   Future loadData() async {
     final SharedPreferences prefs = await _prefs;
 
-    // null check
     if (prefs.containsKey('notes')) {
-      // ambil list notes dari localstorage dan tampung kedalam noteList
       final noteList = prefs.getString('notes');
 
-      // lalu noteList di decode dan di simpan kedalam notes lalu notes akan berupa jadi list
       final notes = jsonDecode(noteList!);
 
-      // notes di looping dan item di dalamnya di masukan kedalam c.noteList yang akan muncul di ui, notes[i] adalah itemnya
       for (var i = 0; i < notes.length; i++) {
         c.noteList.add(notes[i]);
         setState(() {});
@@ -69,10 +63,8 @@ class _AppHomeState extends State<AppHome> {
   Future deleteData() async {
     final SharedPreferences prefs = await _prefs;
 
-    // semua key di hapus
     prefs.clear();
 
-    // setelah di hapus akan di simpan kembail data ke localstorage, jadi di penyimpanan sementara/c.noteList itemnya terhapus lalu c.noteList yang sudah terhapus itemnya tadi akan di simpan kembali ke localstorage
     saveData();
   }
 
@@ -89,8 +81,8 @@ class _AppHomeState extends State<AppHome> {
   void handleAdd() {
     c.addNote(
       Random().nextInt(100),
-      textNoteName.text,
-      textNoteDesc.text,
+      textNote.text,
+      textDesc.text,
     );
     saveData();
     _panelC.close();
@@ -104,8 +96,8 @@ class _AppHomeState extends State<AppHome> {
   }
 
   void clearTextField() {
-    textNoteName.text = '';
-    textNoteDesc.text = '';
+    textNote.text = '';
+    textDesc.text = '';
   }
 
   void handleCancel() {
@@ -144,7 +136,7 @@ class _AppHomeState extends State<AppHome> {
               },
               expandField: false,
               title: 'Note',
-              controller: textNoteName,
+              controller: textNote,
             ),
             CustomInputText(
               onPressed: () {
@@ -152,7 +144,7 @@ class _AppHomeState extends State<AppHome> {
               },
               expandField: true,
               title: 'Description',
-              controller: textNoteDesc,
+              controller: textDesc,
             ),
             Spacer(),
             Container(
@@ -229,21 +221,12 @@ class _AppHomeState extends State<AppHome> {
                           duration: Duration(milliseconds: 200),
                           child: DescriptionPage(
                             item: c.noteList[i],
-                            controller: this.c,
+                            onSaveData: (){
+                              saveData();
+                            },
                           ),
                         ),
                       );
-
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => DescriptionPage(
-                      //       item: c.noteList[i],
-                      //       c: this.c,
-                      //     ),
-                      //   ),
-                      // );
-
                     },
                     deleteItem: (id) {
                       handleDeleteSet(id);

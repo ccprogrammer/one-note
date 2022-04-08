@@ -27,10 +27,12 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  animations: ^2.0.2
   cupertino_icons: ^1.0.2
   flutter:
     sdk: flutter
   page_transition: ^2.0.5
+  flutter_slidable: ^1.2.0
   shared_preferences: ^2.0.13
   sliding_up_panel: ^2.0.0+1
 

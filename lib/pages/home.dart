@@ -3,13 +3,12 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:list_todo/controllers/note_controller.dart';
-import 'package:list_todo/pages/description_page.dart';
 import 'package:list_todo/widgets/custom_button.dart';
 import 'package:list_todo/widgets/custom_input_text.dart';
 import 'package:list_todo/widgets/note_tile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:page_transition/page_transition.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class AppHome extends StatefulWidget {
   AppHome({Key? key}) : super(key: key);
@@ -210,28 +209,51 @@ class _AppHomeState extends State<AppHome> {
             body: ListView(
               children: [
                 for (var i = 0; i < c.noteList.length; i++)
-                  NoteTile(
-                    index: i + 1,
-                    item: c.noteList[i],
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        PageTransition(
-                          type: PageTransitionType.bottomToTop,
-                          duration: Duration(milliseconds: 200),
-                          child: DescriptionPage(
-                            item: c.noteList[i],
-                            onSaveData: (){
-                              saveData();
-                            },
-                          ),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(0, 12, 0, 0),
+
+                    // Slidable agar list bisa di swipe dan ini dari package flutter_slidable
+                    child: Slidable(
+                      key: ValueKey(
+                        c.noteList[i]['id'],
+                      ),
+                      startActionPane: ActionPane(
+                        motion: StretchMotion(),
+                        dismissible: DismissiblePane(
+                          onDismissed: () {
+                            handleDeleteSet(
+                              c.noteList[i]['id'],
+                            );
+                          },
                         ),
-                      );
-                    },
-                    deleteItem: (id) {
-                      handleDeleteSet(id);
-                    },
+                        children: [
+                          SlidableAction(
+                            onPressed: (context) {
+                              handleDeleteSet(
+                                c.noteList[i]['id'],
+                              );
+                            },
+                            backgroundColor: Colors.red,
+                            foregroundColor: Colors.white,
+                            icon: Icons.delete,
+                            label: 'Delete',
+                          ),
+                        ],
+                      ),
+                      child: NoteTile(
+                        index: i + 1,
+                        item: c.noteList[i],
+                        deleteItem: (id) {
+                          handleDeleteSet(id);
+                        },
+                        onSaveData: () {
+                          saveData();
+                        },
+                      ),
+                    ),
                   ),
+
+                //  Button Add Note
                 CustomButton(
                   width: width,
                   title: 'Add Note',

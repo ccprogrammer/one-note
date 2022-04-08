@@ -57,7 +57,7 @@ class _DescriptionPageState extends State<DescriptionPage> {
       backgroundColor: Color(0xff121212),
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: Color(0xff121212),
+        backgroundColor: Color(0xff4C4C4C),
         title: Focus(
           onFocusChange: (focus) {
             onFocusChange();

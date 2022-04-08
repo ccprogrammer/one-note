@@ -181,8 +181,6 @@ class _AppHomeState extends State<AppHome> {
       );
     }
 
-    String datetime3 = DateFormat.MMMMEEEEd().format(DateTime.now());
-
     return WillPopScope(
       onWillPop: () async {
         handlePopPanel();

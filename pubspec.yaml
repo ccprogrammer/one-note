@@ -31,8 +31,9 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter:
     sdk: flutter
-  page_transition: ^2.0.5
   flutter_slidable: ^1.2.0
+  intl: ^0.17.0
+  page_transition: ^2.0.5
   shared_preferences: ^2.0.13
   sliding_up_panel: ^2.0.0+1
 

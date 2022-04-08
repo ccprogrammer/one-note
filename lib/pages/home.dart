@@ -9,6 +9,7 @@ import 'package:list_todo/widgets/note_tile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:intl/intl.dart';
 
 class AppHome extends StatefulWidget {
   AppHome({Key? key}) : super(key: key);
@@ -180,6 +181,8 @@ class _AppHomeState extends State<AppHome> {
       );
     }
 
+    String datetime3 = DateFormat.MMMMEEEEd().format(DateTime.now());
+
     return WillPopScope(
       onWillPop: () async {
         handlePopPanel();
@@ -187,6 +190,11 @@ class _AppHomeState extends State<AppHome> {
       },
       child: Scaffold(
         backgroundColor: Color(0xff121212),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            print(datetime3);
+          },
+        ),
         appBar: AppBar(
           centerTitle: true,
           backgroundColor: Color(0xff121212),
@@ -208,10 +216,10 @@ class _AppHomeState extends State<AppHome> {
             panelBuilder: (controller) => _panel(controller),
             body: ListView(
               children: [
+                SizedBox(height: 12),
                 for (var i = 0; i < c.noteList.length; i++)
                   Container(
-                    padding: EdgeInsets.fromLTRB(0, 12, 0, 0),
-
+                    padding: EdgeInsets.fromLTRB(0, 4, 0, 0),
                     // Slidable agar list bisa di swipe dan ini dari package flutter_slidable
                     child: Slidable(
                       key: ValueKey(

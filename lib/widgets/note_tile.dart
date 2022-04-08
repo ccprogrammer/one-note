@@ -1,6 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:list_todo/pages/description_page.dart';
+import 'package:intl/intl.dart';
 
 class NoteTile extends StatefulWidget {
   const NoteTile({
@@ -27,9 +28,8 @@ class _NoteTileState extends State<NoteTile> {
     var width = MediaQuery.of(context).size.width;
 
     return Container(
-      height: height * 0.08,
-      margin: EdgeInsets.fromLTRB(24, 0, 24, 0),
-
+      height: height * 0.135,
+      margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
       // OpenContainer animasi dari package animations
       child: OpenContainer(
         closedShape: RoundedRectangleBorder(
@@ -42,22 +42,52 @@ class _NoteTileState extends State<NoteTile> {
         transitionDuration: Duration(milliseconds: 600),
         closedBuilder: (context, action) {
           return Padding(
-            padding: EdgeInsets.fromLTRB(12, 8, 12, 8),
+            padding: EdgeInsets.fromLTRB(15, 15, 15, 15),
             child: Row(
               children: [
                 // Note
                 Expanded(
-                  child: Text(
-                    widget.item['note'] ?? 'Empty Error',
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.white,
-                    ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+
+                      // Note Title
+                      Text(
+                        widget.item['note'] ?? 'Empty Error',
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.white,
+                        ),
+                      ),
+                      SizedBox(height: 4),
+
+                      // Note Description
+                      Text(
+                        widget.item['description'] ?? 'Empty Error',
+                        overflow: TextOverflow.ellipsis,
+                        // maxLines: 2,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white70,
+                        ),
+                      ),
+                      Spacer(),
+
+                      // Note Date
+                      Text(
+                        widget.item['date'] ?? 'Empty Error',
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: TextStyle(
+                          color: Colors.white54,
+                          fontSize: 12
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-
                 // Divider
                 SizedBox(width: 16),
                 Container(

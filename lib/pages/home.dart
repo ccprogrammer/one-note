@@ -190,11 +190,6 @@ class _AppHomeState extends State<AppHome> {
       },
       child: Scaffold(
         backgroundColor: Color(0xff121212),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            print(datetime3);
-          },
-        ),
         appBar: AppBar(
           centerTitle: true,
           backgroundColor: Color(0xff121212),

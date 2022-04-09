@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:list_todo/widgets/custom_button.dart';
+import 'package:list_todo/widgets/custom_icon.dart';
 
 class DescriptionPage extends StatefulWidget {
   DescriptionPage({Key? key, required this.item, required this.onSaveData})
@@ -53,11 +54,6 @@ class _DescriptionPageState extends State<DescriptionPage> {
       widget.onSaveData();
     }
 
-    void handleSaveIcon() {
-      saveNote();
-      removeFocus();
-    }
-
     return Scaffold(
       backgroundColor: Color(0xff121212),
       appBar: AppBar(
@@ -69,31 +65,22 @@ class _DescriptionPageState extends State<DescriptionPage> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            GestureDetector(
+            CustomIcon(
               onTap: () {
                 Navigator.pop(context);
               },
-              child: Container(
-                margin: EdgeInsets.fromLTRB(24, 0, 0, 0),
-                child: Image.asset(
-                  'assets/icon_close.png',
-                  width: 32,
-                ),
-              ),
+              icon: Icons.close,
+              margin: EdgeInsets.fromLTRB(24, 0, 0, 0),
             ),
-            GestureDetector(
-              onTap: () {
-                handleSaveIcon();
-              },
-              child: Container(
-                margin: EdgeInsets.fromLTRB(0, 0, 24, 0),
-                child: save
-                    ? Icon(
-                        Icons.check,
-                      )
-                    : SizedBox(width: 24),
-              ),
-            )
+            save
+                ? CustomIcon(
+                    onTap: () {
+                      removeFocus();
+                    },
+                    icon: Icons.check,
+                    margin: EdgeInsets.fromLTRB(0, 0, 24, 0),
+                  )
+                : Container(),
           ],
         ),
       ),
@@ -126,6 +113,10 @@ class _DescriptionPageState extends State<DescriptionPage> {
                     fontSize: 26,
                   ),
                   decoration: InputDecoration(
+                    hintText: 'Title',
+                    hintStyle: TextStyle(
+                      color: Colors.white54,
+                    ),
                     border: InputBorder.none,
                   ),
                 ),
@@ -153,6 +144,10 @@ class _DescriptionPageState extends State<DescriptionPage> {
                     fontSize: 16,
                   ),
                   decoration: InputDecoration(
+                    hintText: 'Description',
+                    hintStyle: TextStyle(
+                      color: Colors.white54,
+                    ),
                     border: InputBorder.none,
                   ),
                 ),

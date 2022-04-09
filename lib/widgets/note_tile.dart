@@ -31,6 +31,7 @@ class _NoteTileState extends State<NoteTile> {
       duration: Duration(milliseconds: 200),
       height: height * 0.135,
       margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+      
       // OpenContainer animasi dari package animations
       child: OpenContainer(
         closedShape: RoundedRectangleBorder(

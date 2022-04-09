@@ -9,7 +9,6 @@ import 'package:list_todo/widgets/note_tile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:intl/intl.dart';
 
 class AppHome extends StatefulWidget {
   AppHome({Key? key}) : super(key: key);
@@ -116,7 +115,6 @@ class _AppHomeState extends State<AppHome> {
     height1 = height2;
     setState(() {});
   }
-
 
 // test bikin animasi container kalo di tap
   double height = 100.0;

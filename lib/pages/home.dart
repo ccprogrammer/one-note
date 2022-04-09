@@ -103,8 +103,6 @@ class _AppHomeState extends State<AppHome> {
     setState(() {});
   }
 
-  void handleFieldValidation() {}
-
   @override
   Widget build(BuildContext context) {
     // Size
@@ -134,50 +132,13 @@ class _AppHomeState extends State<AppHome> {
           children: [
             ListView(
               children: [
-                for (var i = 0; i < c.noteList.length; i++)
-                  Container(
-                    padding: EdgeInsets.fromLTRB(0, 6, 0, 0),
-                    // Slidable agar list bisa di swipe dan ini dari package flutter_slidable
-                    child: Slidable(
-                      key: ValueKey(
-                        c.noteList[i]['id'],
-                      ),
-                      startActionPane: ActionPane(
-                        motion: StretchMotion(),
-                        dismissible: DismissiblePane(
-                          onDismissed: () {
-                            handleDeleteSet(
-                              c.noteList[i]['id'],
-                            );
-                          },
-                        ),
-                        children: [
-                          SlidableAction(
-                            onPressed: (context) {
-                              handleDeleteSet(
-                                c.noteList[i]['id'],
-                              );
-                            },
-                            backgroundColor: Colors.red,
-                            foregroundColor: Colors.white,
-                            icon: Icons.delete,
-                            label: 'Delete',
-                          ),
-                        ],
-                      ),
-                      child: NoteTile(
-                        index: i + 1,
-                        item: c.noteList[i],
-                        deleteItem: (id) {
-                          handleDeleteSet(id);
-                        },
-                        onSaveData: () {
-                          saveData();
-                        },
-                      ),
-                    ),
-                  ),
-                SizedBox(height: height * 0.13),
+                Column(
+                  children: [
+                    for (var i = 0; i < c.noteList.length; i++)
+                      _buildNoteList(i),
+                    SizedBox(height: height * 0.13),
+                  ],
+                ),
               ],
             ),
             Positioned(
@@ -205,6 +166,51 @@ class _AppHomeState extends State<AppHome> {
               panel: _buildPanel(context),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNoteList(i) {
+    return Container(
+      padding: EdgeInsets.fromLTRB(0, 6, 0, 0),
+      // Slidable agar list bisa di swipe dan ini dari package flutter_slidable
+      child: Slidable(
+        key: ValueKey(
+          c.noteList[i]['id'],
+        ),
+        startActionPane: ActionPane(
+          motion: StretchMotion(),
+          dismissible: DismissiblePane(
+            onDismissed: () {
+              handleDeleteSet(
+                c.noteList[i]['id'],
+              );
+            },
+          ),
+          children: [
+            SlidableAction(
+              onPressed: (context) {
+                handleDeleteSet(
+                  c.noteList[i]['id'],
+                );
+              },
+              backgroundColor: Colors.red,
+              foregroundColor: Colors.white,
+              icon: Icons.delete,
+              label: 'Delete',
+            ),
+          ],
+        ),
+        child: NoteTile(
+          index: i + 1,
+          item: c.noteList[i],
+          deleteItem: (id) {
+            handleDeleteSet(id);
+          },
+          onSaveData: () {
+            saveData();
+          },
         ),
       ),
     );

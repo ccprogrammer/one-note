@@ -38,20 +38,15 @@ class _AppHomeState extends State<AppHome> {
 
   Future saveData() async {
     final SharedPreferences prefs = await _prefs;
-
     List notes = c.noteList;
-
     prefs.setString('notes', jsonEncode(notes));
   }
 
   Future loadData() async {
     final SharedPreferences prefs = await _prefs;
-
     if (prefs.containsKey('notes')) {
       final noteList = prefs.getString('notes');
-
       final notes = jsonDecode(noteList!);
-
       for (var i = 0; i < notes.length; i++) {
         c.noteList.add(notes[i]);
         setState(() {});
@@ -61,9 +56,7 @@ class _AppHomeState extends State<AppHome> {
 
   Future deleteData() async {
     final SharedPreferences prefs = await _prefs;
-
     prefs.clear();
-
     saveData();
   }
 

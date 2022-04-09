@@ -6,13 +6,18 @@ import 'package:list_todo/widgets/custom_button.dart';
 import 'package:list_todo/widgets/custom_icon.dart';
 
 class DescriptionPage extends StatefulWidget {
-  DescriptionPage({Key? key, required this.item, required this.onSaveData})
+  DescriptionPage(
+      {Key? key,
+      required this.item,
+      required this.onSaveData,
+      required this.cancelSave})
       : super(key: key);
 
   final dynamic item;
 
   // Controller
   final Function onSaveData;
+  final Function cancelSave;
 
   @override
   State<DescriptionPage> createState() => _DescriptionPageState();
@@ -54,106 +59,114 @@ class _DescriptionPageState extends State<DescriptionPage> {
       widget.onSaveData();
     }
 
-    return Scaffold(
-      backgroundColor: Color(0xff121212),
-      appBar: AppBar(
-        centerTitle: true,
+    return WillPopScope(
+      onWillPop: () async {
+        widget.cancelSave();
+
+        return true;
+      },
+      child: Scaffold(
         backgroundColor: Color(0xff121212),
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        titleSpacing: 0,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            CustomIcon(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              icon: Icons.close,
-              margin: EdgeInsets.fromLTRB(24, 0, 0, 0),
-            ),
-            save
-                ? CustomIcon(
-                    onTap: () {
+        appBar: AppBar(
+          centerTitle: true,
+          backgroundColor: Color(0xff121212),
+          elevation: 0,
+          automaticallyImplyLeading: false,
+          titleSpacing: 0,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              CustomIcon(
+                onTap: () {
+                  widget.cancelSave();
+                  Navigator.pop(context);
+                },
+                icon: Icons.close,
+                margin: EdgeInsets.fromLTRB(24, 0, 0, 0),
+              ),
+              save
+                  ? CustomIcon(
+                      onTap: () {
+                        removeFocus();
+                      },
+                      icon: Icons.check,
+                      margin: EdgeInsets.fromLTRB(0, 0, 24, 0),
+                    )
+                  : Container(),
+            ],
+          ),
+        ),
+        body: GestureDetector(
+          onTap: () {
+            removeFocus();
+          },
+          child: ListView(
+            children: [
+              Container(
+                margin: EdgeInsets.fromLTRB(24, 0, 24, 0),
+                child: Focus(
+                  onFocusChange: (focus) {
+                    onFocusChange();
+                  },
+                  child: TextField(
+                    controller: textNote,
+                    textAlignVertical: TextAlignVertical.center,
+                    // expands: false,
+                    maxLines: null,
+                    onChanged: (value) {
+                      saveNote();
+                    },
+                    onEditingComplete: () {
+                      saveNote();
                       removeFocus();
                     },
-                    icon: Icons.check,
-                    margin: EdgeInsets.fromLTRB(0, 0, 24, 0),
-                  )
-                : Container(),
-          ],
-        ),
-      ),
-      body: GestureDetector(
-        onTap: () {
-          removeFocus();
-        },
-        child: ListView(
-          children: [
-            Container(
-              margin: EdgeInsets.fromLTRB(24, 0, 24, 0),
-              child: Focus(
-                onFocusChange: (focus) {
-                  onFocusChange();
-                },
-                child: TextField(
-                  controller: textNote,
-                  textAlignVertical: TextAlignVertical.center,
-                  // expands: false,
-                  maxLines: null,
-                  onChanged: (value) {
-                    saveNote();
-                  },
-                  onEditingComplete: () {
-                    saveNote();
-                    removeFocus();
-                  },
-                  style: TextStyle(
-                    color: Colors.white.withOpacity(0.85),
-                    fontSize: 26,
-                  ),
-                  decoration: InputDecoration(
-                    hintText: 'Title',
-                    hintStyle: TextStyle(
-                      color: Colors.white54,
+                    style: TextStyle(
+                      color: Colors.white.withOpacity(0.85),
+                      fontSize: 26,
                     ),
-                    border: InputBorder.none,
+                    decoration: InputDecoration(
+                      hintText: 'Title',
+                      hintStyle: TextStyle(
+                        color: Colors.white54,
+                      ),
+                      border: InputBorder.none,
+                    ),
                   ),
                 ),
               ),
-            ),
-            Container(
-              alignment: Alignment.centerLeft,
-              margin: EdgeInsets.fromLTRB(24, 6, 24, 18),
-              child: Focus(
-                onFocusChange: (focus) {
-                  onFocusChange();
-                },
-                child: TextField(
-                  controller: textDesc,
-                  maxLines: null,
-                  onChanged: (value) {
-                    saveNote();
+              Container(
+                alignment: Alignment.centerLeft,
+                margin: EdgeInsets.fromLTRB(24, 6, 24, 18),
+                child: Focus(
+                  onFocusChange: (focus) {
+                    onFocusChange();
                   },
-                  onEditingComplete: () {
-                    saveNote();
-                    removeFocus();
-                  },
-                  style: TextStyle(
-                    color: Colors.white.withOpacity(0.85),
-                    fontSize: 16,
-                  ),
-                  decoration: InputDecoration(
-                    hintText: 'Description',
-                    hintStyle: TextStyle(
-                      color: Colors.white54,
+                  child: TextField(
+                    controller: textDesc,
+                    maxLines: null,
+                    onChanged: (value) {
+                      saveNote();
+                    },
+                    onEditingComplete: () {
+                      saveNote();
+                      removeFocus();
+                    },
+                    style: TextStyle(
+                      color: Colors.white.withOpacity(0.85),
+                      fontSize: 16,
                     ),
-                    border: InputBorder.none,
+                    decoration: InputDecoration(
+                      hintText: 'Description',
+                      hintStyle: TextStyle(
+                        color: Colors.white54,
+                      ),
+                      border: InputBorder.none,
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

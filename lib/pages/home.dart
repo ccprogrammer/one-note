@@ -1,8 +1,11 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:list_todo/controllers/note_controller.dart';
+import 'package:list_todo/pages/description_page.dart';
 import 'package:list_todo/widgets/custom_button.dart';
 import 'package:list_todo/widgets/custom_input_text.dart';
 import 'package:list_todo/widgets/note_tile.dart';
@@ -20,7 +23,7 @@ class AppHome extends StatefulWidget {
 
 class _AppHomeState extends State<AppHome> {
   // jika panelIsOpen/true ketika klik kembali pada back button hp akan menjalankan function _panel.close()/tutup panel jika false akan kembail ke halaman sebelumnya
-  bool exit = false;
+  // bool exit = false;
 
   // Controller
   final c = NoteControler();
@@ -41,6 +44,7 @@ class _AppHomeState extends State<AppHome> {
     final SharedPreferences prefs = await _prefs;
     List notes = c.noteList;
     prefs.setString('notes', jsonEncode(notes));
+    setState(() {});
   }
 
   Future loadData() async {
@@ -62,30 +66,13 @@ class _AppHomeState extends State<AppHome> {
   }
 
 // Handler
-  void handlePopPanel() {
-    if (_panelC.isPanelOpen) {
-      _panelC.close();
-    } else {
-      // ketika panel terbuka panel akan di tutup, ketika panel tertutup this.exit akan menjadi true dan secara otomatis akan kembail ke halaman sebelumnya
-      this.exit = true;
-    }
-  }
 
   void handleAdd() {
     c.addNote(
       Random().nextInt(100),
-      textNote.text,
-      textDesc.text,
+      '',
+      '',
     );
-    saveData();
-    _panelC.close();
-    setState(() {});
-
-    // dismiss keyboard on complete
-    FocusScopeNode currentFocus = FocusScope.of(context);
-    if (!currentFocus.hasPrimaryFocus) {
-      currentFocus.unfocus();
-    }
   }
 
   void clearTextField() {
@@ -103,6 +90,17 @@ class _AppHomeState extends State<AppHome> {
     setState(() {});
   }
 
+  void removeEmptyList() {
+    for (var i = 0; i < c.noteList.length; i++) {
+      if (c.noteList[i]['note'] == '' && c.noteList[i]['description'] == '') {
+        c.noteList.removeWhere(
+            (element) => element['note'] == '' && element['description'] == '');
+      }
+      setState(() {});
+      saveData();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // Size
@@ -111,8 +109,8 @@ class _AppHomeState extends State<AppHome> {
 
     return WillPopScope(
       onWillPop: () async {
-        handlePopPanel();
-        return this.exit;
+        // handlePopPanel();
+        return true;
       },
       child: Scaffold(
         backgroundColor: Color(0xff121212),
@@ -141,30 +139,53 @@ class _AppHomeState extends State<AppHome> {
                 ),
               ],
             ),
+
             Positioned(
               bottom: 24,
               right: 24,
-              child: CustomButton(
-                width: width * 0.13,
-                title: 'Add',
-                titleColor: Colors.white,
-                isIcon: true,
-                icon: Icons.add,
-                onPressed: () {
-                  _panelC.open();
+              child: OpenContainer(
+                transitionDuration: Duration(milliseconds: 650),
+                openColor: Color(0xff8687E7),
+                closedColor: Color(0xff8687E7),
+                tappable: false,
+                closedBuilder: (context, action) {
+                  return CustomButton(
+                    width: width * 0.13,
+                    title: 'Add',
+                    titleColor: Colors.white,
+                    isIcon: true,
+                    icon: Icons.add,
+                    onPressed: () {
+                      handleAdd();
+                      action();
+                    },
+                  );
+                },
+                openBuilder: (context, action) {
+                  return DescriptionPage(
+                    cancelSave: () {
+                      c.removeEmptyList(c);
+                      saveData();
+                    },
+                    item: c.noteList.last,
+                    onSaveData: () {
+                      saveData();
+                    },
+                  );
                 },
               ),
-            ),
-            SlidingUpPanel(
-              controller: _panelC,
-              maxHeight: height * 0.5,
-              minHeight: 1,
-              onPanelClosed: () {
-                clearTextField();
-              },
-              color: Colors.transparent,
-              panel: _buildPanel(context),
-            ),
+            )
+
+            // SlidingUpPanel(
+            //   controller: _panelC,
+            //   maxHeight: height * 0.5,
+            //   minHeight: 1,
+            //   onPanelClosed: () {
+            //     clearTextField();
+            //   },
+            //   color: Colors.transparent,
+            //   panel: _buildPanel(context),
+            // ),
           ],
         ),
       ),
@@ -283,4 +304,30 @@ class _AppHomeState extends State<AppHome> {
       ),
     );
   }
+
+// function untuk kalo pake panel
+  // void handleAdd() {
+  //   c.addNote(
+  //     Random().nextInt(100),
+  //     textNote.text,
+  //     textDesc.text,
+  //   );
+  //   saveData();
+  //   _panelC.close();
+  //   setState(() {});
+
+  //   // dismiss keyboard on complete
+  //   FocusScopeNode currentFocus = FocusScope.of(context);
+  //   if (!currentFocus.hasPrimaryFocus) {
+  //     currentFocus.unfocus();
+  //   }
+  // }
+  // void handlePopPanel() {
+  //   if (_panelC.isPanelOpen) {
+  //     _panelC.close();
+  //   } else {
+  //     // ketika panel terbuka panel akan di tutup, ketika panel tertutup this.exit akan menjadi true dan secara otomatis akan kembail ke halaman sebelumnya
+  //     this.exit = true;
+  //   }
+  // }
 }

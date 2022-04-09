@@ -10,12 +10,14 @@ class NoteTile extends StatefulWidget {
     required this.deleteItem,
     required this.index,
     required this.onSaveData,
+    this.c,
   }) : super(key: key);
   final dynamic item;
   final int index;
 
   final Function deleteItem;
   final Function onSaveData;
+  final dynamic c;
 
   @override
   State<NoteTile> createState() => _NoteTileState();
@@ -30,7 +32,7 @@ class _NoteTileState extends State<NoteTile> {
     return Container(
       height: height * 0.135,
       margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-      
+
       // OpenContainer animasi dari package animations
       child: OpenContainer(
         closedShape: RoundedRectangleBorder(
@@ -111,6 +113,7 @@ class _NoteTileState extends State<NoteTile> {
         },
         openBuilder: (context, action) {
           return DescriptionPage(
+            cancelSave: () {},
             item: widget.item,
             onSaveData: () {
               widget.onSaveData();

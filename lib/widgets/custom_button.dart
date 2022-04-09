@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class CustomButton extends StatelessWidget {
+class CustomButton extends StatefulWidget {
   const CustomButton({
     Key? key,
     this.height,
@@ -10,6 +10,8 @@ class CustomButton extends StatelessWidget {
     this.buttonColor,
     this.borderColor,
     this.titleColor,
+    this.isIcon = false,
+    this.icon,
     required this.onPressed,
   }) : super(key: key);
   final double? height;
@@ -20,31 +22,44 @@ class CustomButton extends StatelessWidget {
   final Color? borderColor;
   final Color? buttonColor;
   final Function onPressed;
+  final bool isIcon;
+  final IconData? icon;
 
+  @override
+  State<CustomButton> createState() => _CustomButtonState();
+}
+
+class _CustomButtonState extends State<CustomButton> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: margin,
-      height: height ?? MediaQuery.of(context).size.height * 0.065,
-      width: width ?? double.infinity,
+      margin: widget.margin,
+      height: widget.height ?? MediaQuery.of(context).size.height * 0.065,
+      width: widget.width ?? double.infinity,
       decoration: BoxDecoration(
-        color: buttonColor ?? Color(0xff8687E7),
+        color: widget.buttonColor ?? Color(0xff8687E7),
         border: Border.all(
-          color: borderColor ?? Color(0xff8687E7),
+          color: widget.borderColor ?? Color(0xff8687E7),
         ),
         borderRadius: BorderRadius.circular(4),
       ),
       child: TextButton(
         onPressed: () {
-          onPressed();
+          widget.onPressed();
         },
-        child: Text(
-          title ?? '',
-          style: TextStyle(
-            fontSize: 16,
-            color: titleColor ?? Colors.white,
-          ),
-        ),
+        child: widget.isIcon
+            ? Icon(
+                widget.icon,
+                color: Colors.white,
+                size: 30,
+              )
+            : Text(
+                widget.title ?? '',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: widget.titleColor ?? Colors.white,
+                ),
+              ),
       ),
     );
   }

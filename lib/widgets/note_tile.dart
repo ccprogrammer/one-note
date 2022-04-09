@@ -27,8 +27,7 @@ class _NoteTileState extends State<NoteTile> {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
 
-    return AnimatedContainer(
-      duration: Duration(milliseconds: 200),
+    return Container(
       height: height * 0.135,
       margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
       

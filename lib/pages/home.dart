@@ -9,6 +9,7 @@ import 'package:list_todo/widgets/note_tile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 
 class AppHome extends StatefulWidget {
   AppHome({Key? key}) : super(key: key);
@@ -18,7 +19,7 @@ class AppHome extends StatefulWidget {
 }
 
 class _AppHomeState extends State<AppHome> {
-  // jika panelIsOpen/true ketika klik kembali pada button hp akan menjalankan function _panel.close()/tutup panel jika false akan kembail ke halaman sebelumnya
+  // jika panelIsOpen/true ketika klik kembali pada back button hp akan menjalankan function _panel.close()/tutup panel jika false akan kembail ke halaman sebelumnya
   bool exit = false;
 
   // Controller
@@ -104,40 +105,6 @@ class _AppHomeState extends State<AppHome> {
 
   void handleFieldValidation() {}
 
-  void animateTap(height1, height2) {
-    height1 = height2;
-    setState(() {});
-  }
-
-// test bikin animasi container kalo di tap
-  double height = 100.0;
-  Widget _testAnimatedContainer() {
-    return GestureDetector(
-      // onTap: () {
-      //   height = 50.0;
-
-      //   setState(() {});
-      //   print('Animated Contaier');
-      // },
-
-      onTapDown: (e) {
-        height = 50.0;
-        setState(() {});
-      },
-      onTapUp: (e) {
-        height = 100.0;
-        setState(() {});
-      },
-
-      child: AnimatedContainer(
-        margin: EdgeInsets.only(top: 32),
-        duration: Duration(milliseconds: 200),
-        height: height,
-        color: Colors.red,
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     // Size
@@ -149,34 +116,43 @@ class _AppHomeState extends State<AppHome> {
         handlePopPanel();
         return this.exit;
       },
+      /*
+      child: Scaffold(
+        body: ListView(
+          children: [
+            for (var i = 0; i < 7; i++)
+              Container(
+                margin: EdgeInsets.fromLTRB(0, 6, 0, 0),
+                width: double.infinity,
+                height: 100,
+                color: Colors.red,
+              ),
+          ],
+        ),
+      ),
+*/
+
       child: Scaffold(
         backgroundColor: Color(0xff121212),
         appBar: AppBar(
           centerTitle: true,
           elevation: 0,
+          toolbarHeight: 65,
           backgroundColor: Color(0xff121212),
           title: Text(
             'NOTE',
             style: TextStyle(
-              fontSize: 20,
+              fontSize: 22,
             ),
           ),
         ),
-        body: SlidingUpPanel(
-            controller: _panelC,
-            maxHeight: height * 0.5,
-            minHeight: 1,
-            onPanelClosed: () {
-              clearTextField();
-            },
-            color: Colors.transparent,
-            panelBuilder: (controller) => _buildPanel(context, controller),
-            body: ListView(
+        body: Stack(
+          children: [
+            ListView(
               children: [
-                SizedBox(height: 12),
                 for (var i = 0; i < c.noteList.length; i++)
                   Container(
-                    padding: EdgeInsets.fromLTRB(0, 4, 0, 0),
+                    padding: EdgeInsets.fromLTRB(0, 6, 0, 0),
                     // Slidable agar list bisa di swipe dan ini dari package flutter_slidable
                     child: Slidable(
                       key: ValueKey(
@@ -217,27 +193,40 @@ class _AppHomeState extends State<AppHome> {
                       ),
                     ),
                   ),
-
-                //  Button Add Note
-                CustomButton(
-                  width: width,
-                  title: 'Add Note',
-                  titleColor: Colors.white,
-                  margin: EdgeInsets.fromLTRB(24, 32, 24, 0),
-                  buttonColor: Colors.transparent,
-                  onPressed: () {
-                    _panelC.open();
-                  },
-                ),
-
-                // _testAnimatedContainer(),
+                SizedBox(height: height * 0.13),
               ],
-            )),
+            ),
+            Positioned(
+              bottom: 24,
+              right: 24,
+              child: CustomButton(
+                width: width * 0.15,
+                title: 'Add',
+                titleColor: Colors.white,
+                isIcon: true,
+                icon: Icons.add,
+                onPressed: () {
+                  _panelC.open();
+                },
+              ),
+            ),
+            SlidingUpPanel(
+              controller: _panelC,
+              maxHeight: height * 0.5,
+              minHeight: 1,
+              onPanelClosed: () {
+                clearTextField();
+              },
+              color: Colors.transparent,
+              panel: _buildPanel(context),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildPanel(context, controller) {
+  Widget _buildPanel(context) {
     return Container(
       decoration: BoxDecoration(
         color: Color(0xff363636),
@@ -257,7 +246,7 @@ class _AppHomeState extends State<AppHome> {
                     handleAdd();
                   },
                   expandField: false,
-                  title: 'Note',
+                  title: 'Title',
                   controller: textNote,
                 ),
                 CustomInputText(

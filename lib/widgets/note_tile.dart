@@ -38,9 +38,9 @@ class _NoteTileState extends State<NoteTile> {
             Radius.circular(0.0),
           ),
         ),
-        openColor: Color(0xff4C4C4C),
-        closedColor: Color(0xff4C4C4C),
-        transitionDuration: Duration(milliseconds: 600),
+        closedColor: Color(0xff4C4C4C).withOpacity(0.6),
+        openColor: Color(0xff4C4C4C).withOpacity(0.6),
+        transitionDuration: Duration(milliseconds: 900),
         closedBuilder: (context, action) {
           return Padding(
             padding: EdgeInsets.fromLTRB(15, 15, 15, 15),

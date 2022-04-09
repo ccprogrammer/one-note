@@ -116,22 +116,6 @@ class _AppHomeState extends State<AppHome> {
         handlePopPanel();
         return this.exit;
       },
-      /*
-      child: Scaffold(
-        body: ListView(
-          children: [
-            for (var i = 0; i < 7; i++)
-              Container(
-                margin: EdgeInsets.fromLTRB(0, 6, 0, 0),
-                width: double.infinity,
-                height: 100,
-                color: Colors.red,
-              ),
-          ],
-        ),
-      ),
-*/
-
       child: Scaffold(
         backgroundColor: Color(0xff121212),
         appBar: AppBar(
@@ -200,7 +184,7 @@ class _AppHomeState extends State<AppHome> {
               bottom: 24,
               right: 24,
               child: CustomButton(
-                width: width * 0.15,
+                width: width * 0.13,
                 title: 'Add',
                 titleColor: Colors.white,
                 isIcon: true,

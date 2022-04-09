@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:list_todo/widgets/custom_button.dart';
 
 class DescriptionPage extends StatefulWidget {
@@ -42,8 +43,12 @@ class _DescriptionPageState extends State<DescriptionPage> {
     }
 
     void saveNote() {
+      String dateTime = DateFormat.MMMMd().format(DateTime.now());
+      String hourTime = DateFormat.jm().format(DateTime.now());
       widget.item['note'] = textNote.text;
       widget.item['description'] = textDesc.text;
+      widget.item['date'] = dateTime;
+      widget.item['hour'] = hourTime;
 
       widget.onSaveData();
     }
@@ -77,7 +82,7 @@ class _DescriptionPageState extends State<DescriptionPage> {
               ),
             ),
             GestureDetector(
-              onTap: (){
+              onTap: () {
                 handleSaveIcon();
               },
               child: Container(

@@ -27,7 +27,8 @@ class _NoteTileState extends State<NoteTile> {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
 
-    return Container(
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 200),
       height: height * 0.135,
       margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
       // OpenContainer animasi dari package animations
@@ -50,10 +51,9 @@ class _NoteTileState extends State<NoteTile> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-
                       // Note Title
                       Text(
-                        widget.item['note'] ?? 'Empty Error',
+                        widget.item['note'] ?? 'Empty Note',
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                         style: TextStyle(
@@ -65,7 +65,7 @@ class _NoteTileState extends State<NoteTile> {
 
                       // Note Description
                       Text(
-                        widget.item['description'] ?? 'Empty Error',
+                        widget.item['description'] ?? 'Empty Description',
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                         style: TextStyle(
@@ -76,15 +76,7 @@ class _NoteTileState extends State<NoteTile> {
                       Spacer(),
 
                       // Note Date
-                      Text(
-                        widget.item['date'] ?? 'Empty Error',
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        style: TextStyle(
-                          color: Colors.white54,
-                          fontSize: 12
-                        ),
-                      ),
+                      _buildDateTiem(),
                     ],
                   ),
                 ),
@@ -127,5 +119,25 @@ class _NoteTileState extends State<NoteTile> {
         },
       ),
     );
+  }
+
+  Widget _buildDateTiem() {
+    // Untuk memunculkan date berformat Bulan Tanggal / Jam saja tergantung last modified kapan kalo sudah beda hari akan muncul jam saja
+    String dateTime = DateFormat.MMMMd().format(DateTime.now());
+    if (widget.item['date'] == dateTime) {
+      return Text(
+        widget.item['hour'] ?? 'Empty Hour',
+        overflow: TextOverflow.ellipsis,
+        maxLines: 1,
+        style: TextStyle(color: Colors.white54, fontSize: 12),
+      );
+    } else {
+      return Text(
+        widget.item['date'] ?? 'Empty Date',
+        overflow: TextOverflow.ellipsis,
+        maxLines: 1,
+        style: TextStyle(color: Colors.white54, fontSize: 12),
+      );
+    }
   }
 }

@@ -112,6 +112,41 @@ class _AppHomeState extends State<AppHome> {
 
   void handleFieldValidation() {}
 
+  void animateTap(height1, height2) {
+    height1 = height2;
+    setState(() {});
+  }
+
+
+// test bikin animasi container kalo di tap
+  double height = 100.0;
+  Widget _testAnimatedContainer() {
+    return GestureDetector(
+      // onTap: () {
+      //   height = 50.0;
+
+      //   setState(() {});
+      //   print('Animated Contaier');
+      // },
+
+      onTapDown: (e) {
+        height = 50.0;
+        setState(() {});
+      },
+      onTapUp: (e) {
+        height = 100.0;
+        setState(() {});
+      },
+
+      child: AnimatedContainer(
+        margin: EdgeInsets.only(top: 32),
+        duration: Duration(milliseconds: 200),
+        height: height,
+        color: Colors.red,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // Size
@@ -127,6 +162,7 @@ class _AppHomeState extends State<AppHome> {
         backgroundColor: Color(0xff121212),
         appBar: AppBar(
           centerTitle: true,
+          elevation: 0,
           backgroundColor: Color(0xff121212),
           title: Text(
             'NOTE',
@@ -202,6 +238,8 @@ class _AppHomeState extends State<AppHome> {
                     _panelC.open();
                   },
                 ),
+
+                // _testAnimatedContainer(),
               ],
             )),
       ),

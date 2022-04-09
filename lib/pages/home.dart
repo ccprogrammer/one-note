@@ -118,69 +118,6 @@ class _AppHomeState extends State<AppHome> {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
 
-    // Custom Widget
-    Widget _panel(controller) {
-      return Container(
-        decoration: BoxDecoration(
-          color: Color(0xff363636),
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(16),
-          ),
-        ),
-        width: double.infinity,
-        child: Column(
-          children: [
-            CustomInputText(
-              onPressed: () {
-                handleAdd();
-              },
-              expandField: false,
-              title: 'Note',
-              controller: textNote,
-            ),
-            CustomInputText(
-              onPressed: () {
-                handleAdd();
-              },
-              expandField: true,
-              title: 'Description',
-              controller: textDesc,
-            ),
-            Spacer(),
-            Container(
-              margin: EdgeInsets.fromLTRB(24, 0, 24, 30),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  CustomButton(
-                    height: 48,
-                    width: 154,
-                    title: 'Cancel',
-                    margin: EdgeInsets.fromLTRB(0, 12, 0, 0),
-                    buttonColor: Colors.transparent,
-                    borderColor: Colors.red,
-                    onPressed: () {
-                      handleCancel();
-                    },
-                  ),
-                  CustomButton(
-                    height: 48,
-                    width: 154,
-                    title: 'Add',
-                    margin: EdgeInsets.fromLTRB(0, 12, 0, 0),
-                    buttonColor: Color(0xff8687E7),
-                    onPressed: () {
-                      handleAdd();
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
     return WillPopScope(
       onWillPop: () async {
         handlePopPanel();
@@ -206,7 +143,7 @@ class _AppHomeState extends State<AppHome> {
               clearTextField();
             },
             color: Colors.transparent,
-            panelBuilder: (controller) => _panel(controller),
+            panelBuilder: (controller) => _buildPanel(context, controller),
             body: ListView(
               children: [
                 SizedBox(height: 12),
@@ -267,6 +204,74 @@ class _AppHomeState extends State<AppHome> {
                 ),
               ],
             )),
+      ),
+    );
+  }
+
+  Widget _buildPanel(context, controller) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Color(0xff363636),
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(16),
+        ),
+      ),
+      width: double.infinity,
+      child: Column(
+        children: [
+          Expanded(
+            child: Column(
+              // controller: controller,
+              children: [
+                CustomInputText(
+                  onPressed: () {
+                    handleAdd();
+                  },
+                  expandField: false,
+                  title: 'Note',
+                  controller: textNote,
+                ),
+                CustomInputText(
+                  onPressed: () {
+                    handleAdd();
+                  },
+                  expandField: true,
+                  title: 'Description',
+                  controller: textDesc,
+                ),
+              ],
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.fromLTRB(24, 0, 24, 30),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                CustomButton(
+                  height: 48,
+                  width: 154,
+                  title: 'Cancel',
+                  margin: EdgeInsets.fromLTRB(0, 12, 0, 0),
+                  buttonColor: Colors.transparent,
+                  borderColor: Colors.red,
+                  onPressed: () {
+                    handleCancel();
+                  },
+                ),
+                CustomButton(
+                  height: 48,
+                  width: 154,
+                  title: 'Add',
+                  margin: EdgeInsets.fromLTRB(0, 12, 0, 0),
+                  buttonColor: Color(0xff8687E7),
+                  onPressed: () {
+                    handleAdd();
+                  },
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

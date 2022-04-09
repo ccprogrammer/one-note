@@ -20,6 +20,8 @@ class CustomInputText extends StatefulWidget {
 class _CustomInputTextState extends State<CustomInputText> {
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -27,23 +29,28 @@ class _CustomInputTextState extends State<CustomInputText> {
           margin: EdgeInsets.fromLTRB(24, 24, 24, 0),
           child: Text(
             widget.title,
-            style: TextStyle(
-              color: Colors.white60,
-              fontSize: 16,
-            ),
+            style: widget.expandField
+                ? TextStyle(
+                    color: Color(0xffAFAFAF),
+                    fontSize: 18,
+                  )
+                : TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                  ),
           ),
         ),
         widget.expandField
             ? Container(
                 margin: EdgeInsets.fromLTRB(24, 12, 24, 0),
                 padding: EdgeInsets.fromLTRB(12, 0, 12, 0),
-                height: MediaQuery.of(context).size.height * 0.16,
+                height: height * 0.16,
                 decoration: BoxDecoration(
                   border: Border.all(
                     color: Colors.white60,
                   ),
                   borderRadius: BorderRadius.circular(4),
-                  color: Colors.white10,
                 ),
                 child: TextField(
                   controller: widget.controller,
@@ -68,7 +75,6 @@ class _CustomInputTextState extends State<CustomInputText> {
                     color: Colors.white60,
                   ),
                   borderRadius: BorderRadius.circular(4),
-                  color: Colors.white10,
                 ),
                 child: TextField(
                   controller: widget.controller,

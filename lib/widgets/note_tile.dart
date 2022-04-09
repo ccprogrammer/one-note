@@ -67,7 +67,7 @@ class _NoteTileState extends State<NoteTile> {
                       Text(
                         widget.item['description'] ?? 'Empty Error',
                         overflow: TextOverflow.ellipsis,
-                        // maxLines: 2,
+                        maxLines: 1,
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.white70,

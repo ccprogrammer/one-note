@@ -57,43 +57,40 @@ class _DescriptionPageState extends State<DescriptionPage> {
       backgroundColor: Color(0xff121212),
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: Color(0xff4C4C4C),
-        title: Focus(
-          onFocusChange: (focus) {
-            onFocusChange();
-          },
-          child: TextField(
-            textAlign: TextAlign.center,
-            controller: textNote,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 20,
+        backgroundColor: Color(0xff121212),
+        elevation: 0,
+        automaticallyImplyLeading: false,
+        titleSpacing: 0,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Container(
+                margin: EdgeInsets.fromLTRB(24, 0, 0, 0),
+                child: Image.asset(
+                  'assets/icon_close.png',
+                  width: 32,
+                ),
+              ),
             ),
-            onChanged: (value) {
-              saveNote();
-            },
-            onEditingComplete: () {
-              saveNote();
-              removeFocus();
-            },
-            decoration: InputDecoration(
-              hintText: 'NOTE TITLE',
-              border: InputBorder.none,
-            ),
-          ),
+            GestureDetector(
+              onTap: (){
+                handleSaveIcon();
+              },
+              child: Container(
+                margin: EdgeInsets.fromLTRB(0, 0, 24, 0),
+                child: save
+                    ? Icon(
+                        Icons.check,
+                      )
+                    : SizedBox(width: 24),
+              ),
+            )
+          ],
         ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              handleSaveIcon();
-            },
-            icon: save
-                ? Icon(
-                    Icons.check,
-                  )
-                : SizedBox(width: 24),
-          ),
-        ],
       ),
       body: GestureDetector(
         onTap: () {
@@ -102,16 +99,42 @@ class _DescriptionPageState extends State<DescriptionPage> {
         child: ListView(
           children: [
             Container(
+              margin: EdgeInsets.fromLTRB(24, 0, 24, 0),
+              child: Focus(
+                onFocusChange: (focus) {
+                  onFocusChange();
+                },
+                child: TextField(
+                  controller: textNote,
+                  textAlignVertical: TextAlignVertical.center,
+                  // expands: false,
+                  maxLines: null,
+                  onChanged: (value) {
+                    saveNote();
+                  },
+                  onEditingComplete: () {
+                    saveNote();
+                    removeFocus();
+                  },
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.85),
+                    fontSize: 26,
+                  ),
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                  ),
+                ),
+              ),
+            ),
+            Container(
               alignment: Alignment.centerLeft,
-              margin: EdgeInsets.fromLTRB(24, 18, 24, 18),
-              height: height,
+              margin: EdgeInsets.fromLTRB(24, 6, 24, 18),
               child: Focus(
                 onFocusChange: (focus) {
                   onFocusChange();
                 },
                 child: TextField(
                   controller: textDesc,
-                  expands: true,
                   maxLines: null,
                   onChanged: (value) {
                     saveNote();

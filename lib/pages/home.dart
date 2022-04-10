@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:list_todo/controllers/note_controller.dart';
+import 'package:list_todo/pages/add_description_page.dart';
 import 'package:list_todo/pages/description_page.dart';
 import 'package:list_todo/widgets/custom_button.dart';
 import 'package:list_todo/widgets/custom_input_text.dart';
@@ -67,11 +68,11 @@ class _AppHomeState extends State<AppHome> {
 
 // Handler
 
-  void handleAdd() {
+  void handleAdd(title, desc) {
     c.addNote(
       Random().nextInt(100),
-      '',
-      '',
+      title,
+      desc,
     );
   }
 
@@ -156,19 +157,14 @@ class _AppHomeState extends State<AppHome> {
                     isIcon: true,
                     icon: Icons.add,
                     onPressed: () {
-                      handleAdd();
                       action();
                     },
                   );
                 },
                 openBuilder: (context, action) {
-                  return DescriptionPage(
-                    cancelSave: () {
-                      c.removeEmptyList(c);
-                      saveData();
-                    },
-                    item: c.noteList.last,
-                    onSaveData: () {
+                  return AddDescriptionPage(
+                    onSaveData: (title, desc) {
+                      handleAdd(title, desc);
                       saveData();
                     },
                   );
@@ -236,7 +232,7 @@ class _AppHomeState extends State<AppHome> {
       ),
     );
   }
-
+/*
   Widget _buildPanel(context) {
     return Container(
       decoration: BoxDecoration(
@@ -304,7 +300,7 @@ class _AppHomeState extends State<AppHome> {
       ),
     );
   }
-
+*/
 // function untuk kalo pake panel
   // void handleAdd() {
   //   c.addNote(

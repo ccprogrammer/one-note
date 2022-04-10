@@ -18,16 +18,16 @@ class NoteControler {
     });
   }
 
-  void deleteNote(id) {
-    noteList.removeWhere((element) => element['id'] == id);
+  void editNote(i, title, desc) {
+    if (title == '' && desc == '') {
+      noteList.removeWhere((element) => element['id'] == noteList[i]['id']);
+    } else {
+      noteList[i]['note'] = title;
+      noteList[i]['description'] = desc;
+    }
   }
 
-  void removeEmptyList(c) {
-    for (var i = 0; i < c.noteList.length; i++) {
-      if (c.noteList[i]['note'] == '' && c.noteList[i]['description'] == '') {
-        c.noteList.removeWhere(
-            (element) => element['note'] == '' && element['description'] == '');
-      }
-    }
+  void deleteNote(id) {
+    noteList.removeWhere((element) => element['id'] == id);
   }
 }

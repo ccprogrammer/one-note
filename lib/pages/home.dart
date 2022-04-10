@@ -28,7 +28,6 @@ class _AppHomeState extends State<AppHome> {
 
   // Controller
   final c = NoteControler();
-  final _panelC = PanelController();
   final textNote = TextEditingController();
   final textDesc = TextEditingController();
 
@@ -67,39 +66,23 @@ class _AppHomeState extends State<AppHome> {
   }
 
 // Handler
-
   void handleAdd(title, desc) {
     c.addNote(
       Random().nextInt(100),
       title,
       desc,
     );
+    saveData();
   }
 
-  void clearTextField() {
-    textNote.text = '';
-    textDesc.text = '';
+  void handleEdit(i, title, desc) {
+    c.editNote(i, title, desc);
+    saveData();
   }
 
-  void handleCancel() {
-    _panelC.close();
-  }
-
-  void handleDeleteSet(id) {
+  void handleDelete(id) {
     c.deleteNote(id);
     deleteData();
-    setState(() {});
-  }
-
-  void removeEmptyList() {
-    for (var i = 0; i < c.noteList.length; i++) {
-      if (c.noteList[i]['note'] == '' && c.noteList[i]['description'] == '') {
-        c.noteList.removeWhere(
-            (element) => element['note'] == '' && element['description'] == '');
-      }
-      setState(() {});
-      saveData();
-    }
   }
 
   @override
@@ -108,82 +91,74 @@ class _AppHomeState extends State<AppHome> {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
 
-    return WillPopScope(
-      onWillPop: () async {
-        // handlePopPanel();
-        return true;
-      },
-      child: Scaffold(
+    return Scaffold(
+      backgroundColor: Color(0xff121212),
+      appBar: AppBar(
+        centerTitle: true,
+        elevation: 0,
+        toolbarHeight: 65,
         backgroundColor: Color(0xff121212),
-        appBar: AppBar(
-          centerTitle: true,
-          elevation: 0,
-          toolbarHeight: 65,
-          backgroundColor: Color(0xff121212),
-          title: Text(
-            'NOTE',
-            style: TextStyle(
-              fontSize: 22,
-            ),
+        title: Text(
+          'NOTE',
+          style: TextStyle(
+            fontSize: 22,
           ),
         ),
-        body: Stack(
-          children: [
-            ListView(
-              children: [
-                Column(
-                  children: [
-                    for (var i = 0; i < c.noteList.length; i++)
-                      _buildNoteList(i),
-                    SizedBox(height: height * 0.13),
-                  ],
-                ),
-              ],
-            ),
-
-            Positioned(
-              bottom: 24,
-              right: 24,
-              child: OpenContainer(
-                transitionDuration: Duration(milliseconds: 650),
-                openColor: Color(0xff8687E7),
-                closedColor: Color(0xff8687E7),
-                tappable: false,
-                closedBuilder: (context, action) {
-                  return CustomButton(
-                    width: width * 0.13,
-                    title: 'Add',
-                    titleColor: Colors.white,
-                    isIcon: true,
-                    icon: Icons.add,
-                    onPressed: () {
-                      action();
-                    },
-                  );
-                },
-                openBuilder: (context, action) {
-                  return AddDescriptionPage(
-                    onSaveData: (title, desc) {
-                      handleAdd(title, desc);
-                      saveData();
-                    },
-                  );
-                },
+      ),
+      body: Stack(
+        children: [
+          ListView(
+            children: [
+              Column(
+                children: [
+                  for (var i = 0; i < c.noteList.length; i++) _buildNoteList(i),
+                  SizedBox(height: height * 0.13),
+                ],
               ),
-            )
+            ],
+          ),
 
-            // SlidingUpPanel(
-            //   controller: _panelC,
-            //   maxHeight: height * 0.5,
-            //   minHeight: 1,
-            //   onPanelClosed: () {
-            //     clearTextField();
-            //   },
-            //   color: Colors.transparent,
-            //   panel: _buildPanel(context),
-            // ),
-          ],
-        ),
+          Positioned(
+            bottom: 24,
+            right: 24,
+            child: OpenContainer(
+              transitionDuration: Duration(milliseconds: 650),
+              openColor: Color(0xff8687E7),
+              closedColor: Color(0xff8687E7),
+              tappable: false,
+              closedBuilder: (context, action) {
+                return CustomButton(
+                  width: width * 0.13,
+                  title: 'Add',
+                  titleColor: Colors.white,
+                  isIcon: true,
+                  icon: Icons.add,
+                  onPressed: () {
+                    action();
+                  },
+                );
+              },
+              openBuilder: (context, action) {
+                return AddDescriptionPage(
+                  onSaveData: (title, desc) {
+                    handleAdd(title, desc);
+                  },
+                );
+              },
+            ),
+          )
+
+          // SlidingUpPanel(
+          //   controller: _panelC,
+          //   maxHeight: height * 0.5,
+          //   minHeight: 1,
+          //   onPanelClosed: () {
+          //     clearTextField();
+          //   },
+          //   color: Colors.transparent,
+          //   panel: _buildPanel(context),
+          // ),
+        ],
       ),
     );
   }
@@ -200,7 +175,7 @@ class _AppHomeState extends State<AppHome> {
           motion: StretchMotion(),
           dismissible: DismissiblePane(
             onDismissed: () {
-              handleDeleteSet(
+              handleDelete(
                 c.noteList[i]['id'],
               );
             },
@@ -208,7 +183,7 @@ class _AppHomeState extends State<AppHome> {
           children: [
             SlidableAction(
               onPressed: (context) {
-                handleDeleteSet(
+                handleDelete(
                   c.noteList[i]['id'],
                 );
               },
@@ -223,10 +198,10 @@ class _AppHomeState extends State<AppHome> {
           index: i + 1,
           item: c.noteList[i],
           deleteItem: (id) {
-            handleDeleteSet(id);
+            handleDelete(id);
           },
-          onSaveData: () {
-            saveData();
+          onSaveData: (title, desc) {
+            handleEdit(i, title, desc);
           },
         ),
       ),

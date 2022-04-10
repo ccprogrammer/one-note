@@ -30,9 +30,8 @@ class _NoteTileState extends State<NoteTile> {
     var width = MediaQuery.of(context).size.width;
 
     return Container(
-      height: height * 0.135,
+      height: height * 0.125,
       margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-
       // OpenContainer animasi dari package animations
       child: OpenContainer(
         closedShape: RoundedRectangleBorder(
@@ -45,45 +44,50 @@ class _NoteTileState extends State<NoteTile> {
         transitionDuration: Duration(milliseconds: 650),
         closedBuilder: (context, action) {
           return Padding(
-            padding: EdgeInsets.fromLTRB(15, 15, 15, 15),
+            padding: EdgeInsets.fromLTRB(16, 16, 16, 16),
             child: Row(
               children: [
                 // Note
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       // Note Title
-                      Text(
-                        widget.item['note'] ?? 'Empty Note',
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.white,
+                      Container(
+                        child: Text(
+                          widget.item['note'] ?? 'Empty Note',
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
-                      SizedBox(height: 4),
 
                       // Note Description
-                      Text(
-                        widget.item['description'] ?? 'Empty Description',
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.white70,
+                      Container(
+                        child: Text(
+                          widget.item['description'] ?? 'Empty Description',
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.white70,
+                          ),
                         ),
                       ),
-                      Spacer(),
 
                       // Note Date
-                      _buildDateTiem(),
+                      Container(
+                        child: _buildDateTiem(),
+                      ),
                     ],
                   ),
                 ),
                 // Divider
-                SizedBox(width: 16),
+                SizedBox(width: 42),
                 Container(
                   width: 2,
                   color: Color(0xff979797),
@@ -113,10 +117,9 @@ class _NoteTileState extends State<NoteTile> {
         },
         openBuilder: (context, action) {
           return DescriptionPage(
-            cancelSave: () {},
             item: widget.item,
-            onSaveData: () {
-              widget.onSaveData();
+            onSaveData: (title, desc) {
+              widget.onSaveData(title, desc);
             },
           );
         },

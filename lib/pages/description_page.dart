@@ -1,23 +1,18 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:list_todo/widgets/custom_button.dart';
 import 'package:list_todo/widgets/custom_icon.dart';
+import 'package:list_todo/widgets/custom_input_textfield.dart';
 
 class DescriptionPage extends StatefulWidget {
-  DescriptionPage(
-      {Key? key,
-      required this.item,
-      required this.onSaveData,
-      required this.cancelSave})
-      : super(key: key);
+  DescriptionPage({
+    Key? key,
+    required this.item,
+    required this.onSaveData,
+  }) : super(key: key);
 
   final dynamic item;
 
   // Controller
   final Function onSaveData;
-  final Function cancelSave;
 
   @override
   State<DescriptionPage> createState() => _DescriptionPageState();
@@ -27,14 +22,19 @@ class _DescriptionPageState extends State<DescriptionPage> {
   bool exit = false;
   bool save = false;
 
-  
+  final textNote = TextEditingController();
+  final textDesc = TextEditingController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    textNote.text = widget.item['note'];
+    textDesc.text = widget.item['description'];
+  }
 
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
-
-    final textNote = TextEditingController(text: widget.item['note']);
-    final textDesc = TextEditingController(text: widget.item['description']);
     // Memilih posisi kursor saat textfield di klik, kasus ini kursor akan berada di akhir text
     textNote.selection =
         TextSelection.fromPosition(TextPosition(offset: textNote.text.length));
@@ -50,20 +50,10 @@ class _DescriptionPageState extends State<DescriptionPage> {
       FocusManager.instance.primaryFocus?.unfocus();
     }
 
-    void saveNote() {
-      String dateTime = DateFormat.MMMMd().format(DateTime.now());
-      String hourTime = DateFormat.jm().format(DateTime.now());
-      widget.item['note'] = textNote.text;
-      widget.item['description'] = textDesc.text;
-      widget.item['date'] = dateTime;
-      widget.item['hour'] = hourTime;
-
-      widget.onSaveData();
-    }
-
     return WillPopScope(
       onWillPop: () async {
-        widget.cancelSave();
+        widget.onSaveData(textNote.text, textDesc.text);
+        Navigator.pop(context);
 
         return true;
       },
@@ -80,7 +70,7 @@ class _DescriptionPageState extends State<DescriptionPage> {
             children: [
               CustomIcon(
                 onTap: () {
-                  widget.cancelSave();
+                  widget.onSaveData(textNote.text, textDesc.text);
                   Navigator.pop(context);
                 },
                 icon: Icons.close,
@@ -89,6 +79,7 @@ class _DescriptionPageState extends State<DescriptionPage> {
               save
                   ? CustomIcon(
                       onTap: () {
+                        widget.onSaveData(textNote.text, textDesc.text);
                         removeFocus();
                       },
                       icon: Icons.check,
@@ -104,38 +95,23 @@ class _DescriptionPageState extends State<DescriptionPage> {
           },
           child: ListView(
             children: [
+              // Title TextField
               Container(
                 margin: EdgeInsets.fromLTRB(24, 0, 24, 0),
                 child: Focus(
                   onFocusChange: (focus) {
                     onFocusChange();
                   },
-                  child: TextField(
+                  child: CustomInputTextField(
                     controller: textNote,
-                    textAlignVertical: TextAlignVertical.center,
-                    // expands: false,
-                    maxLines: null,
-                    onChanged: (value) {
-                      saveNote();
-                    },
-                    onEditingComplete: () {
-                      saveNote();
-                      removeFocus();
-                    },
-                    style: TextStyle(
-                      color: Colors.white.withOpacity(0.85),
-                      fontSize: 26,
-                    ),
-                    decoration: InputDecoration(
-                      hintText: 'Title',
-                      hintStyle: TextStyle(
-                        color: Colors.white54,
-                      ),
-                      border: InputBorder.none,
-                    ),
+                    hintText: 'Title',
+                    color: Colors.white54,
+                    fontSize: 26,
                   ),
                 ),
               ),
+
+              // Description TextField
               Container(
                 alignment: Alignment.centerLeft,
                 margin: EdgeInsets.fromLTRB(24, 6, 24, 18),
@@ -143,27 +119,11 @@ class _DescriptionPageState extends State<DescriptionPage> {
                   onFocusChange: (focus) {
                     onFocusChange();
                   },
-                  child: TextField(
+                  child: CustomInputTextField(
                     controller: textDesc,
-                    maxLines: null,
-                    onChanged: (value) {
-                      saveNote();
-                    },
-                    onEditingComplete: () {
-                      saveNote();
-                      removeFocus();
-                    },
-                    style: TextStyle(
-                      color: Colors.white.withOpacity(0.85),
-                      fontSize: 16,
-                    ),
-                    decoration: InputDecoration(
-                      hintText: 'Description',
-                      hintStyle: TextStyle(
-                        color: Colors.white54,
-                      ),
-                      border: InputBorder.none,
-                    ),
+                    hintText: 'Description',
+                    color: Colors.white38,
+                    fontSize: 16,
                   ),
                 ),
               ),

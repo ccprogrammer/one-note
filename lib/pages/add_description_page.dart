@@ -1,14 +1,9 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:list_todo/widgets/custom_button.dart';
 import 'package:list_todo/widgets/custom_icon.dart';
+import 'package:list_todo/widgets/custom_input_textfield.dart';
 
 class AddDescriptionPage extends StatefulWidget {
-  AddDescriptionPage(
-      {Key? key, required this.onSaveData})
-      : super(key: key);
+  AddDescriptionPage({Key? key, required this.onSaveData}) : super(key: key);
 
   // Controller
   final Function onSaveData;
@@ -24,25 +19,24 @@ class _AddDescriptionPageState extends State<AddDescriptionPage> {
   final textNote = TextEditingController();
   final textDesc = TextEditingController();
 
+  void onFocusChange() {
+    save = !save;
+    setState(() {});
+  }
+
+  void removeFocus() {
+    FocusManager.instance.primaryFocus?.unfocus();
+  }
+
+  void handleSave() {
+    if (textNote.text == '' && textDesc.text == '') {
+    } else {
+      widget.onSaveData(textNote.text, textDesc.text);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
-
-    void onFocusChange() {
-      save = !save;
-      setState(() {});
-    }
-
-    void removeFocus() {
-      FocusManager.instance.primaryFocus?.unfocus();
-    }
-
-    void handleSave() {
-      if (textNote.text != '' && textDesc.text != '') {
-        widget.onSaveData(textNote.text, textDesc.text);
-      }
-    }
-
     return WillPopScope(
       onWillPop: () async {
         handleSave();
@@ -74,7 +68,6 @@ class _AddDescriptionPageState extends State<AddDescriptionPage> {
                       },
                       icon: Icons.check,
                       margin: EdgeInsets.fromLTRB(0, 0, 24, 0),
-                      
                     )
                   : Container(),
             ],
@@ -86,38 +79,23 @@ class _AddDescriptionPageState extends State<AddDescriptionPage> {
           },
           child: ListView(
             children: [
+              // Title TextField
               Container(
                 margin: EdgeInsets.fromLTRB(24, 0, 24, 0),
                 child: Focus(
                   onFocusChange: (focus) {
                     onFocusChange();
                   },
-                  child: TextField(
+                  child: CustomInputTextField(
                     controller: textNote,
-                    textAlignVertical: TextAlignVertical.center,
-                    // expands: false,
-                    maxLines: null,
-                    onChanged: (value) {
-                      // saveNote();
-                    },
-                    onEditingComplete: () {
-                      // saveNote();
-                      removeFocus();
-                    },
-                    style: TextStyle(
-                      color: Colors.white.withOpacity(0.85),
-                      fontSize: 26,
-                    ),
-                    decoration: InputDecoration(
-                      hintText: 'Title',
-                      hintStyle: TextStyle(
-                        color: Colors.white54,
-                      ),
-                      border: InputBorder.none,
-                    ),
+                    hintText: 'Title',
+                    color: Colors.white54,
+                    fontSize: 26,
                   ),
                 ),
               ),
+
+              // Description TextField
               Container(
                 alignment: Alignment.centerLeft,
                 margin: EdgeInsets.fromLTRB(24, 6, 24, 18),
@@ -125,27 +103,11 @@ class _AddDescriptionPageState extends State<AddDescriptionPage> {
                   onFocusChange: (focus) {
                     onFocusChange();
                   },
-                  child: TextField(
+                  child: CustomInputTextField(
                     controller: textDesc,
-                    maxLines: null,
-                    onChanged: (value) {
-                      // saveNote();
-                    },
-                    onEditingComplete: () {
-                      // saveNote();
-                      removeFocus();
-                    },
-                    style: TextStyle(
-                      color: Colors.white.withOpacity(0.85),
-                      fontSize: 16,
-                    ),
-                    decoration: InputDecoration(
-                      hintText: 'Description',
-                      hintStyle: TextStyle(
-                        color: Colors.white54,
-                      ),
-                      border: InputBorder.none,
-                    ),
+                    hintText: 'Description',
+                    color: Colors.white38,
+                    fontSize: 16,
                   ),
                 ),
               ),

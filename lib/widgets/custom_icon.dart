@@ -5,11 +5,12 @@ class CustomIcon extends StatefulWidget {
     Key? key,
     required this.onTap,
     required this.icon,
-    required this.margin,
+    required this.margin, this.color,
   }) : super(key: key);
   final Function onTap;
   final IconData icon;
   final EdgeInsets margin;
+  final Color? color;
 
   @override
   State<CustomIcon> createState() => _CustomIconState();
@@ -28,7 +29,7 @@ class _CustomIconState extends State<CustomIcon> {
         height: 32,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(4),
-          color: Color(0xff1D1D1D),
+          color: widget.color ?? Color(0xff1D1D1D),
         ),
         child: Icon(
           widget.icon,

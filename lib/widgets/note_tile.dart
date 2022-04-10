@@ -40,7 +40,7 @@ class _NoteTileState extends State<NoteTile> {
             Radius.circular(0.0),
           ),
         ),
-        closedColor: Color(0xff4C4C4C).withOpacity(0.6),
+        closedColor: Color(0xff4C4C4C).withOpacity(0.15),
         openColor: Color(0xff4C4C4C).withOpacity(0.6),
         transitionDuration: Duration(milliseconds: 650),
         closedBuilder: (context, action) {

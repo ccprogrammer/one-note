@@ -24,6 +24,8 @@ class NoteControler {
     } else {
       noteList[i]['note'] = title;
       noteList[i]['description'] = desc;
+      noteList[i]['date'] = dateTime;
+      noteList[i]['hour'] = hourTime;
     }
   }
 

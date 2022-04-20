@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/src/size_extension.dart';
@@ -22,6 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
     final SharedPreferences prefs = await _prefs;
     Timer(Duration(seconds: 2), () {
       if (prefs.containsKey('is_visited')) {
+        prefs.remove('is_visited');
         Navigator.pushAndRemoveUntil(
           context,
           PageTransition(

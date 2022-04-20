@@ -25,6 +25,8 @@ class _AppHomeState extends State<AppHome> {
   final textNote = TextEditingController();
   final textDesc = TextEditingController();
 
+  String? username;
+
   @override
   void initState() {
     super.initState();
@@ -42,6 +44,12 @@ class _AppHomeState extends State<AppHome> {
 
   Future loadData() async {
     final SharedPreferences prefs = await _prefs;
+
+    if (prefs.containsKey('username')) {
+      var _username = jsonDecode(prefs.getString('username')!);
+      username = _username;
+    }
+
     if (prefs.containsKey('notes')) {
       final noteList = prefs.getString('notes');
       final notes = jsonDecode(noteList!);
@@ -121,16 +129,55 @@ class _AppHomeState extends State<AppHome> {
   }
 
   Widget _buildNoteList() {
-    return ListView(
-      children: [
-        Column(
+    if (c.noteList.length == 0) {
+      return Center(
+        child: Column(
           children: [
-            for (var i = 0; i < c.noteList.length; i++) _buildNotes(i),
-            SizedBox(height: 120.h),
+            Container(
+              margin: EdgeInsets.fromLTRB(0, 75.h, 0, 0),
+              child: Image.asset(
+                'assets/image_empty.png',
+                width: 227.w,
+              ),
+            ),
+            Container(
+              child: Text(
+                
+                'What do you want to note $username?',
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20.sp,
+                ),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.fromLTRB(0, 10.h, 0, 0),
+              child: Text(
+                'Tap + to add your note',
+                style: TextStyle(
+                  color: Colors.white70,
+                  fontSize: 16.sp,
+                ),
+              ),
+            ),
           ],
         ),
-      ],
-    );
+      );
+    } else {
+      return ListView(
+        children: [
+          Column(
+            children: [
+              for (var i = 0; i < c.noteList.length; i++) _buildNotes(i),
+              SizedBox(height: 120.h),
+            ],
+          ),
+        ],
+      );
+    }
   }
 
   Widget _buildNotes(i) {

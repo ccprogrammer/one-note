@@ -1,7 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:list_todo/pages/home.dart';
+import 'package:flutter_screenutil/src/size_extension.dart';
+import 'package:list_todo/pages/intro_page/introduction_page.dart';
 import 'package:page_transition/page_transition.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -18,12 +19,13 @@ class _SplashScreenState extends State<SplashScreen> {
     Timer(
       Duration(seconds: 2),
       () => Navigator.pushAndRemoveUntil(
-          context,
-          PageTransition(
-            type: PageTransitionType.fade,
-            child: AppHome(),
-          ),
-          (route) => false),
+        context,
+        PageTransition(
+          type: PageTransitionType.fade,
+          child: IntroductionPage(),
+        ),
+        (route) => false,
+      ),
     );
 
     super.initState();
@@ -39,15 +41,15 @@ class _SplashScreenState extends State<SplashScreen> {
           children: [
             Image.asset(
               'assets/logo_start.png',
-              width: 113,
+              width: 113.w,
             ),
             Container(
-              margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+              margin: EdgeInsets.fromLTRB(0, 24, 0, 0),
               child: Text(
-                'Add Note',
+                'UpNote',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 40,
+                  fontSize: 40.sp,
                   fontWeight: FontWeight.bold,
                 ),
               ),

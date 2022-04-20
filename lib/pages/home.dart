@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/src/size_extension.dart';
 import 'package:list_todo/controllers/note_controller.dart';
 import 'package:list_todo/pages/add_description_page.dart';
+import 'package:list_todo/widgets/constants.dart';
 import 'package:list_todo/widgets/custom_button.dart';
 import 'package:list_todo/widgets/note_tile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -39,19 +40,19 @@ class _AppHomeState extends State<AppHome> {
   Future saveData() async {
     final SharedPreferences prefs = await _prefs;
     List notes = c.noteList;
-    prefs.setString('notes', jsonEncode(notes));
+    prefs.setString(Constants.notes, jsonEncode(notes));
   }
 
   Future loadData() async {
     final SharedPreferences prefs = await _prefs;
 
-    if (prefs.containsKey('username')) {
-      var _username = jsonDecode(prefs.getString('username')!);
+    if (prefs.containsKey(Constants.username)) {
+      var _username = jsonDecode(prefs.getString(Constants.username)!);
       username = _username;
     }
 
-    if (prefs.containsKey('notes')) {
-      final noteList = prefs.getString('notes');
+    if (prefs.containsKey(Constants.notes)) {
+      final noteList = prefs.getString(Constants.notes);
       final notes = jsonDecode(noteList!);
       for (var i = 0; i < notes.length; i++) {
         c.noteList.add(notes[i]);
@@ -62,7 +63,7 @@ class _AppHomeState extends State<AppHome> {
 
   Future deleteData() async {
     final SharedPreferences prefs = await _prefs;
-    prefs.remove('notes');
+    prefs.remove(Constants.notes);
     saveData();
   }
 

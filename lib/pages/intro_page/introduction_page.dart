@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/src/size_extension.dart';
 import 'package:list_todo/pages/home.dart';
+import 'package:list_todo/widgets/constants.dart';
 import 'package:list_todo/widgets/custom_button.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -276,7 +277,7 @@ class _RegisterNameState extends State<RegisterName> {
 
   Future register() async {
     final SharedPreferences prefs = await _prefs;
-    prefs.setString('username', jsonEncode(nameController.text));
+    prefs.setString(Constants.username, jsonEncode(nameController.text));
   }
 
   @override
@@ -311,7 +312,7 @@ class _RegisterNameState extends State<RegisterName> {
                   fontSize: 22.sp,
                 ),
                 decoration: InputDecoration(
-                  hintText: 'Please enter your name here',
+                  hintText: 'Enter your name here',
                   hintStyle: TextStyle(
                     color: Colors.white.withOpacity(0.67),
                     fontSize: 16.sp,

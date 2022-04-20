@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:list_todo/pages/home.dart';
-import 'package:list_todo/pages/test_page.dart';
+import 'package:list_todo/pages/start_screen.dart';
 
 
 void main() => runApp(MyApp());
@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: AppHome(),
+      home: SplashScreen(),
     );
   }
 }

@@ -6,14 +6,10 @@ import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:list_todo/controllers/note_controller.dart';
 import 'package:list_todo/pages/add_description_page.dart';
-import 'package:list_todo/pages/description_page.dart';
 import 'package:list_todo/widgets/custom_button.dart';
-import 'package:list_todo/widgets/custom_input_text.dart';
 import 'package:list_todo/widgets/note_tile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 
 class AppHome extends StatefulWidget {
   AppHome({Key? key}) : super(key: key);

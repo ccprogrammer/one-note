@@ -40,7 +40,6 @@ class _AppHomeState extends State<AppHome> {
     final SharedPreferences prefs = await _prefs;
     List notes = c.noteList;
     prefs.setString('notes', jsonEncode(notes));
-    setState(() {});
   }
 
   Future loadData() async {
@@ -57,7 +56,7 @@ class _AppHomeState extends State<AppHome> {
 
   Future deleteData() async {
     final SharedPreferences prefs = await _prefs;
-    prefs.clear();
+    prefs.remove('notes');
     saveData();
   }
 
@@ -69,6 +68,7 @@ class _AppHomeState extends State<AppHome> {
       desc,
     );
     saveData();
+    setState(() {});
   }
 
   void handleEdit(i, title, desc) {

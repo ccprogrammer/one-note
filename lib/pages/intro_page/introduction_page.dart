@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/src/size_extension.dart';
 import 'package:list_todo/pages/home.dart';
 import 'package:list_todo/widgets/custom_button.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class IntroductionPage extends StatefulWidget {
   const IntroductionPage({Key? key}) : super(key: key);
@@ -35,6 +36,22 @@ class _IntroductionPageState extends State<IntroductionPage> {
           'You can organize your daily tasks by adding your tasks into separate categories',
     ),
   ];
+
+  // Shared Preferences Section
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
+  Future isVisited() async {
+    final SharedPreferences prefs = await _prefs;
+    prefs.setBool('is_visited', true);
+    Navigator.pushAndRemoveUntil(
+      context,
+      PageTransition(
+        type: PageTransitionType.fade,
+        child: AppHome(),
+      ),
+      (route) => false,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,14 +86,7 @@ class _IntroductionPageState extends State<IntroductionPage> {
       automaticallyImplyLeading: false,
       title: TextButton(
         onPressed: () {
-          Navigator.pushAndRemoveUntil(
-            context,
-            PageTransition(
-              type: PageTransitionType.fade,
-              child: AppHome(),
-            ),
-            (route) => false,
-          );
+          isVisited();
         },
         child: Text(
           'SKIP',
@@ -119,14 +129,7 @@ class _IntroductionPageState extends State<IntroductionPage> {
               width: currentPage == pages.length - 1 ? 140.sp : 90.sp,
               onPressed: () {
                 currentPage == pages.length - 1
-                    ? Navigator.pushAndRemoveUntil(
-                        context,
-                        PageTransition(
-                          type: PageTransitionType.fade,
-                          child: AppHome(),
-                        ),
-                        (route) => false,
-                      )
+                    ? isVisited()
                     : _pageBoardController.nextPage(
                         duration: Duration(microseconds: 500),
                         curve: Curves.linear,

@@ -132,14 +132,14 @@ class _NoteTileState extends State<NoteTile> {
     String dateTime = DateFormat.MMMMd().format(DateTime.now());
     if (widget.item['date'] == dateTime) {
       return Text(
-        widget.item['hour'] ?? 'Empty Hour',
+        '${widget.item['hour']}' ?? 'Empty Hour',
         overflow: TextOverflow.ellipsis,
         maxLines: 1,
         style: TextStyle(color: Colors.white54, fontSize: 12),
       );
     } else {
       return Text(
-        widget.item['date'] ?? 'Empty Date',
+        '${widget.item['date']}, ${widget.item['year']}' ?? 'Empty Date',
         overflow: TextOverflow.ellipsis,
         maxLines: 1,
         style: TextStyle(color: Colors.white54, fontSize: 12),

@@ -118,10 +118,19 @@ class _IntroductionPageState extends State<IntroductionPage> {
             CustomButton(
               width: currentPage == pages.length - 1 ? 140.sp : 90.sp,
               onPressed: () {
-                _pageBoardController.nextPage(
-                  duration: Duration(microseconds: 500),
-                  curve: Curves.linear,
-                );
+                currentPage == pages.length - 1
+                    ? Navigator.pushAndRemoveUntil(
+                        context,
+                        PageTransition(
+                          type: PageTransitionType.fade,
+                          child: AppHome(),
+                        ),
+                        (route) => false,
+                      )
+                    : _pageBoardController.nextPage(
+                        duration: Duration(microseconds: 500),
+                        curve: Curves.linear,
+                      );
               },
               title: currentPage == pages.length - 1 ? 'GET STARTED' : 'NEXT',
             ),

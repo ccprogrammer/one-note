@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/src/size_extension.dart';
 
 class CustomInputTextField extends StatefulWidget {
   CustomInputTextField({
@@ -27,7 +28,7 @@ class _CustomInputTextFieldState extends State<CustomInputTextField> {
       maxLines: null,
       style: TextStyle(
         color: Colors.white.withOpacity(0.85),
-        fontSize: widget.fontSize ?? 26,
+        fontSize: widget.fontSize ?? 26.sp,
       ),
       decoration: InputDecoration(
         hintText: widget.hintText,

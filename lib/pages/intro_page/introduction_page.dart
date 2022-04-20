@@ -104,7 +104,7 @@ class _IntroductionPageState extends State<IntroductionPage> {
     return BottomAppBar(
       color: Color(0xff121212),
       child: Container(
-        margin: EdgeInsets.fromLTRB(0, 24.h, 24.h, 24.h),
+        margin: EdgeInsets.fromLTRB(0, 24.h, 24.w, 24.h),
         child: Row(
           children: [
             CustomButton(
@@ -126,7 +126,7 @@ class _IntroductionPageState extends State<IntroductionPage> {
             ),
             Spacer(),
             CustomButton(
-              width: currentPage == pages.length - 1 ? 140.sp : 90.sp,
+              width: currentPage == pages.length - 1 ? 140.w : 90.w,
               onPressed: () {
                 currentPage == pages.length - 1
                     ? isVisited()
@@ -148,16 +148,16 @@ class _IntroductionPageState extends State<IntroductionPage> {
       bottom: 0,
       left: 0,
       right: 0,
-      top: 140.sp,
+      top: 140.h,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           for (var i = 0; i < pages.length; i++)
             AnimatedContainer(
               duration: Duration(milliseconds: 200),
-              width: currentPage == i ? 20.0.sp : 8.0.sp,
-              height: 4.0.sp,
-              margin: EdgeInsets.fromLTRB(4.sp, 0, 4.sp, 0),
+              width: currentPage == i ? 20.0.w : 8.0.w,
+              height: 4.0.h,
+              margin: EdgeInsets.fromLTRB(4.w, 0, 4.w, 0),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(50),
                 color: currentPage == i

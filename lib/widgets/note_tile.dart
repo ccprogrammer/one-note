@@ -1,5 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/src/size_extension.dart';
 import 'package:list_todo/pages/description_page.dart';
 import 'package:intl/intl.dart';
 
@@ -30,7 +31,7 @@ class _NoteTileState extends State<NoteTile> {
     var width = MediaQuery.of(context).size.width;
 
     return Container(
-      height: height * 0.125,
+      height: 120.h,
       margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
       // OpenContainer animasi dari package animations
       child: OpenContainer(
@@ -44,7 +45,7 @@ class _NoteTileState extends State<NoteTile> {
         transitionDuration: Duration(milliseconds: 650),
         closedBuilder: (context, action) {
           return Padding(
-            padding: EdgeInsets.fromLTRB(16, 16, 16, 16),
+            padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 16.h),
             child: Row(
               children: [
                 // Note
@@ -60,7 +61,7 @@ class _NoteTileState extends State<NoteTile> {
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 16.sp,
                             color: Colors.white,
                           ),
                         ),
@@ -73,7 +74,7 @@ class _NoteTileState extends State<NoteTile> {
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                           style: TextStyle(
-                            fontSize: 12,
+                            fontSize: 12.sp,
                             color: Colors.white70,
                           ),
                         ),
@@ -87,16 +88,16 @@ class _NoteTileState extends State<NoteTile> {
                   ),
                 ),
                 // Divider
-                SizedBox(width: 42),
+                SizedBox(width: 42.w),
                 Container(
-                  width: 2,
+                  width: 2.w,
                   color: Color(0xff979797),
                 ),
 
                 // Icon Delete
-                SizedBox(width: 16),
+                SizedBox(width: 16.w),
                 Container(
-                  padding: EdgeInsets.fromLTRB(4, 4, 4, 4),
+                  padding: EdgeInsets.fromLTRB(4.w, 4.h, 4.w, 4.h),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(
@@ -107,7 +108,7 @@ class _NoteTileState extends State<NoteTile> {
                     child: Icon(
                       Icons.navigate_next,
                       color: Colors.white,
-                      size: 16,
+                      size: 16.w,
                     ),
                   ),
                 ),
@@ -135,14 +136,14 @@ class _NoteTileState extends State<NoteTile> {
         widget.item['hour'] ?? 'Empty Hour',
         overflow: TextOverflow.ellipsis,
         maxLines: 1,
-        style: TextStyle(color: Colors.white54, fontSize: 12),
+        style: TextStyle(color: Colors.white54, fontSize: 12.sp),
       );
     } else {
       return Text(
         '${widget.item['date']}, ${widget.item['year']}',
         overflow: TextOverflow.ellipsis,
         maxLines: 1,
-        style: TextStyle(color: Colors.white54, fontSize: 12),
+        style: TextStyle(color: Colors.white54, fontSize: 12.sp),
       );
     }
   }

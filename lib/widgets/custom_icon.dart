@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/src/size_extension.dart';
 
 class CustomIcon extends StatefulWidget {
   const CustomIcon({
@@ -25,8 +26,8 @@ class _CustomIconState extends State<CustomIcon> {
       },
       child: Container(
         margin: widget.margin,
-        width: 32,
-        height: 32,
+        width: 32.w,
+        height: 32.h,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(4),
           color: widget.color ?? Color(0xff1D1D1D),

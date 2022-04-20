@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/src/size_extension.dart';
 
 class CustomButton extends StatefulWidget {
   const CustomButton({
@@ -38,14 +39,14 @@ class _CustomButtonState extends State<CustomButton> {
     return Container(
       margin: widget.margin,
       padding: widget.padding,
-      height: widget.height ?? MediaQuery.of(context).size.height * 0.065,
+      height: widget.height,
       width: widget.width ?? double.infinity,
       decoration: BoxDecoration(
         color: widget.buttonColor ?? Color(0xff8687E7),
         border: Border.all(
           color: widget.borderColor ?? Color(0xff8687E7),
         ),
-        borderRadius: BorderRadius.circular(4),
+        borderRadius: BorderRadius.circular(4.r),
       ),
       child: TextButton(
         onPressed: () {
@@ -55,12 +56,12 @@ class _CustomButtonState extends State<CustomButton> {
             ? Icon(
                 widget.icon,
                 color: Colors.white,
-                size: 30,
+                size: 30.w,
               )
             : Text(
                 widget.title ?? 'onPressed',
                 style: widget.style ?? TextStyle(
-                  fontSize: 16,
+                  fontSize: 16.sp,
                   color: widget.titleColor ?? Colors.white,
                 ),
               ),

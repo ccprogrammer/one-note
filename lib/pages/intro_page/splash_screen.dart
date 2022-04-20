@@ -55,25 +55,9 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       backgroundColor: Color(0xff121212),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              'assets/logo_start.png',
-              width: 113.w,
-            ),
-            Container(
-              margin: EdgeInsets.fromLTRB(0, 24, 0, 0),
-              child: Text(
-                'UpNote',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 40.sp,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ],
+        child: Image.asset(
+          'assets/logo_start.png',
+          width: 113.w,
         ),
       ),
     );

@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/src/size_extension.dart';
 import 'package:list_todo/controllers/note_controller.dart';
 import 'package:list_todo/pages/add_description_page.dart';
 import 'package:list_todo/widgets/custom_button.dart';
@@ -19,9 +20,6 @@ class AppHome extends StatefulWidget {
 }
 
 class _AppHomeState extends State<AppHome> {
-  // jika panelIsOpen/true ketika klik kembali pada back button hp akan menjalankan function _panel.close()/tutup panel jika false akan kembail ke halaman sebelumnya
-  // bool exit = false;
-
   // Controller
   final c = NoteControler();
   final textNote = TextEditingController();
@@ -49,8 +47,8 @@ class _AppHomeState extends State<AppHome> {
       final notes = jsonDecode(noteList!);
       for (var i = 0; i < notes.length; i++) {
         c.noteList.add(notes[i]);
-        setState(() {});
       }
+      setState(() {});
     }
   }
 
@@ -74,76 +72,24 @@ class _AppHomeState extends State<AppHome> {
   void handleEdit(i, title, desc) {
     c.editNote(i, title, desc);
     saveData();
+    setState(() {});
   }
 
   void handleDelete(id) {
     c.deleteNote(id);
     deleteData();
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    // Size
-    var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
-
     return Scaffold(
       backgroundColor: Color(0xff121212),
-      appBar: AppBar(
-        centerTitle: true,
-        elevation: 0,
-        toolbarHeight: 65,
-        backgroundColor: Color(0xff121212),
-        title: Text(
-          'NOTE',
-          style: TextStyle(
-            fontSize: 22,
-          ),
-        ),
-      ),
+      appBar: _buildAppBar(),
       body: Stack(
         children: [
-          ListView(
-            children: [
-              Column(
-                children: [
-                  for (var i = 0; i < c.noteList.length; i++) _buildNoteList(i),
-                  SizedBox(height: height * 0.13),
-                ],
-              ),
-            ],
-          ),
-
-          Positioned(
-            bottom: 24,
-            right: 24,
-            child: OpenContainer(
-              transitionDuration: Duration(milliseconds: 650),
-              openColor: Color(0xff8687E7),
-              closedColor: Color(0xff8687E7),
-              tappable: false,
-              closedBuilder: (context, action) {
-                return CustomButton(
-                  width: width * 0.13,
-                  title: 'Add',
-                  titleColor: Colors.white,
-                  isIcon: true,
-                  icon: Icons.add,
-                  onPressed: () {
-                    action();
-                  },
-                );
-              },
-              openBuilder: (context, action) {
-                return AddDescriptionPage(
-                  onSaveData: (title, desc) {
-                    handleAdd(title, desc);
-                  },
-                );
-              },
-            ),
-          )
-
+          _buildNoteList(),
+          _buildBottomButton(),
           // SlidingUpPanel(
           //   controller: _panelC,
           //   maxHeight: height * 0.5,
@@ -159,9 +105,37 @@ class _AppHomeState extends State<AppHome> {
     );
   }
 
-  Widget _buildNoteList(i) {
+  PreferredSizeWidget _buildAppBar() {
+    return AppBar(
+      centerTitle: true,
+      elevation: 0,
+      toolbarHeight: 65.h,
+      backgroundColor: Color(0xff121212),
+      title: Text(
+        'UPNOTE',
+        style: TextStyle(
+          fontSize: 22.sp,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNoteList() {
+    return ListView(
+      children: [
+        Column(
+          children: [
+            for (var i = 0; i < c.noteList.length; i++) _buildNotes(i),
+            SizedBox(height: 120.h),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildNotes(i) {
     return Container(
-      padding: EdgeInsets.fromLTRB(0, 6, 0, 0),
+      padding: EdgeInsets.fromLTRB(0, 6.h, 0, 0),
       // Slidable agar list bisa di swipe dan ini dari package flutter_slidable
       child: Slidable(
         key: ValueKey(
@@ -203,6 +177,39 @@ class _AppHomeState extends State<AppHome> {
       ),
     );
   }
+
+  Widget _buildBottomButton() {
+    return Positioned(
+      bottom: 36.h,
+      right: 36.w,
+      child: OpenContainer(
+        transitionDuration: Duration(milliseconds: 650),
+        openColor: Color(0xff8687E7),
+        closedColor: Color(0xff8687E7),
+        tappable: false,
+        closedBuilder: (context, action) {
+          return CustomButton(
+            width: 50.w,
+            title: 'Add',
+            titleColor: Colors.white,
+            isIcon: true,
+            icon: Icons.add,
+            onPressed: () {
+              action();
+            },
+          );
+        },
+        openBuilder: (context, action) {
+          return AddDescriptionPage(
+            onSaveData: (title, desc) {
+              handleAdd(title, desc);
+            },
+          );
+        },
+      ),
+    );
+  }
+
 /*
   Widget _buildPanel(context) {
     return Container(

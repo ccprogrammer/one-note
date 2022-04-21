@@ -56,8 +56,12 @@ class _AddDescriptionPageState extends State<AddDescriptionPage> {
             children: [
               CustomIcon(
                 onTap: () {
+                  removeFocus();
                   handleSave();
-                  Navigator.pop(context);
+                  // it's a weird bug, the add button will stay in center for a few milliseconds then move to bottom if Future.delayed not applied wait... it's not a bug it's a new hidden feature !!!! AMAZING !!!
+                  Future.delayed(Duration(milliseconds: 100), () {
+                    return Navigator.pop(context);
+                  });
                 },
                 icon: Icons.close,
                 margin: EdgeInsets.fromLTRB(24.w, 0, 0, 0),

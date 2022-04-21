@@ -22,6 +22,10 @@ class NoteControler {
     });
   }
 
+  void addNoteIcon(i, icon)  {
+   noteList[i!]['icon'] =  icon;
+  }
+
   void editNote(i, title, desc) {
     if (title == '' && desc == '') {
       noteList.removeWhere((element) => element['id'] == noteList[i]['id']);

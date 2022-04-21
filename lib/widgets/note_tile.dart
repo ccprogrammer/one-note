@@ -12,12 +12,14 @@ class NoteTile extends StatefulWidget {
     required this.index,
     required this.onSaveData,
     this.c,
+    required this.changeIcon,
   }) : super(key: key);
   final dynamic item;
   final int index;
 
   final Function deleteItem;
   final Function onSaveData;
+  final Function changeIcon;
   final dynamic c;
 
   @override
@@ -96,24 +98,24 @@ class _NoteTileState extends State<NoteTile> {
 
                 // Icon Delete
                 SizedBox(width: 16.w),
-
-                Stack(
-                  children: [
-                    Image.asset(
-                      'assets/noteicon_playstation.png',
-                      width: 55.w,
-                    ),
-                    SizedBox(
-                      width: 55.w,
-                      height: 55.h,
-                      child: Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          onTap: () {},
-                        ),
+                Container(
+                  width: 55.w,
+                  height: 55.h,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage(
+                        '${widget.item['icon'] ?? 'assets/category/noteicon_add.png'}',
                       ),
                     ),
-                  ],
+                  ),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: () {
+                        widget.changeIcon(widget.index);
+                      },
+                    ),
+                  ),
                 ),
 
                 // Container(

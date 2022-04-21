@@ -11,6 +11,7 @@ import 'package:list_todo/widgets/custom_button.dart';
 import 'package:list_todo/widgets/note_tile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class AppHome extends StatefulWidget {
   AppHome({Key? key}) : super(key: key);
@@ -22,6 +23,7 @@ class AppHome extends StatefulWidget {
 class _AppHomeState extends State<AppHome> {
   // Controller
   final c = NoteControler();
+  final _panelC = PanelController();
   final textNote = TextEditingController();
   final textDesc = TextEditingController();
   final textUsername = TextEditingController();
@@ -32,6 +34,40 @@ class _AppHomeState extends State<AppHome> {
     {'value': 'What\'s up, '},
   ];
   String greetings = 'Hi';
+
+  List noteIcon = [
+    {
+      'value': 'assets/category/noteicon_playstation.png',
+    },
+    {
+      'value': 'assets/category/noteicon_movie.png',
+    },
+    {
+      'value': 'assets/category/noteicon_home.png',
+    },
+    {
+      'value': 'assets/category/noteicon_health.png',
+    },
+    {
+      'value': 'assets/category/noteicon_music.png',
+    },
+    {
+      'value': 'assets/category/noteicon_social.png',
+    },
+    // {
+    //   'value': 'assets/category/noteicon_university.png',
+    // },
+    {
+      'value': 'assets/category/noteicon_sport.png',
+    },
+    {
+      'value': 'assets/category/noteicon_work.png',
+    },
+    {
+      'value': 'assets/category/noteicon_grocery.png',
+    },
+  ];
+  int? noteIndex;
 
   @override
   void initState() {
@@ -95,38 +131,52 @@ class _AppHomeState extends State<AppHome> {
     setState(() {});
   }
 
+  void handleChangeIcon(value) {
+    c.addNoteIcon(noteIndex, value);
+    saveData();
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () async {
-      //     final SharedPreferences prefs = await _prefs;
-      //     prefs.clear();
-      //   },
-      //   child: Icon(Icons.clear),
-      // ),
-      backgroundColor: Color(0xff121212),
-      appBar: _buildAppBar(),
-      body: GestureDetector(
-        onTap: () {
-          FocusManager.instance.primaryFocus?.unfocus();
-        },
-        child: Stack(
-          children: [
-            _buildNoteList(),
-            _buildBottomButton(),
-            // SlidingUpPanel(
-            //   controller: _panelC,
-            //   maxHeight: height * 0.5,
-            //   minHeight: 1,
-            //   onPanelClosed: () {
-            //     clearTextField();
-            //   },
-            //   color: Colors.transparent,
-            //   panel: _buildPanel(context),
-            // ),
-          ],
+    return WillPopScope(
+      onWillPop: () async {
+        if (_panelC.isPanelOpen) {
+          _panelC.close();
+          return false;
+        } else {
+          return true;
+        }
+      },
+      child: Scaffold(
+        backgroundColor: Color(0xff121212),
+        appBar: _buildAppBar(),
+        body: GestureDetector(
+          onTap: () {
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
+          child: Stack(
+            children: [
+              _buildNoteList(),
+              _buildBottomButton(),
+              SlidingUpPanel(
+                controller: _panelC,
+                // maxHeight: MediaQuery.of(context).size.height * 0.5,
+                minHeight: 1,
+                onPanelClosed: () {},
+                color: Colors.transparent,
+                panelBuilder: (controller) {
+                  return _buildPanel(
+                    context: context,
+                    controller: controller,
+                    changeNoteIcon: (value) {
+                      handleChangeIcon(value);
+                    },
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -138,7 +188,6 @@ class _AppHomeState extends State<AppHome> {
       elevation: 0,
       toolbarHeight: 100.h,
       backgroundColor: Color(0xff121212),
-      // backgroundColor: Colors.grey,
       titleSpacing: 24.w,
       title: Row(
         children: [
@@ -271,6 +320,10 @@ class _AppHomeState extends State<AppHome> {
           onSaveData: (title, desc) {
             handleEdit(i, title, desc);
           },
+          changeIcon: (_) {
+            noteIndex = i;
+            _panelC.open();
+          },
         ),
       ),
     );
@@ -308,75 +361,95 @@ class _AppHomeState extends State<AppHome> {
     );
   }
 
-/*
-  Widget _buildPanel(context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Color(0xff363636),
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(16),
+  Widget _buildPanel({context, controller, changeNoteIcon}) {
+    return Stack(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            color: Color(0xff363636),
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(16),
+            ),
+          ),
+          width: double.infinity,
+          child: Column(
+            children: [
+              Container(
+                alignment: Alignment.center,
+                margin: EdgeInsets.fromLTRB(0.w, 10.h, 0.w, 0.w),
+                child: Text(
+                  'Choose Category',
+                  style: TextStyle(
+                    fontSize: 20.sp,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.fromLTRB(5.w, 10.h, 5.w, 10.h),
+                child: Divider(
+                  color: Color(0xff979797),
+                  thickness: 2.h,
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  margin: EdgeInsets.fromLTRB(30.w, 0, 30.w, 0),
+                  child: ListView(
+                    controller: controller,
+                    children: [
+                      GridView.builder(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          crossAxisSpacing: 30.w,
+                          mainAxisSpacing: 30.h,
+                          // mainAxisExtent: 80,
+                        ),
+                        primary: false,
+                        shrinkWrap: true,
+                        itemCount: noteIcon.length,
+                        itemBuilder: (context, index) {
+                          return Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage(
+                                  noteIcon[index]['value'],
+                                ),
+                              ),
+                            ),
+                            child: Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                onTap: () {
+                                  changeNoteIcon(noteIcon[index]['value']);
+                                },
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                      SizedBox(height: 30.h),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
-      width: double.infinity,
-      child: Column(
-        children: [
-          Expanded(
-            child: Column(
-              // controller: controller,
-              children: [
-                CustomInputText(
-                  onPressed: () {
-                    handleAdd();
-                  },
-                  expandField: false,
-                  title: 'Title',
-                  controller: textNote,
-                ),
-                CustomInputText(
-                  onPressed: () {
-                    handleAdd();
-                  },
-                  expandField: true,
-                  title: 'Description',
-                  controller: textDesc,
-                ),
-              ],
-            ),
+        Positioned(
+          bottom: 24.h,
+          left: 24.w,
+          right: 24.w,
+          child: CustomButton(
+            title: 'Add Category',
+            onPressed: () {},
           ),
-          Container(
-            margin: EdgeInsets.fromLTRB(24, 0, 24, 30),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                CustomButton(
-                  height: 48,
-                  width: 154,
-                  title: 'Cancel',
-                  margin: EdgeInsets.fromLTRB(0, 12, 0, 0),
-                  buttonColor: Colors.transparent,
-                  borderColor: Colors.red,
-                  onPressed: () {
-                    handleCancel();
-                  },
-                ),
-                CustomButton(
-                  height: 48,
-                  width: 154,
-                  title: 'Add',
-                  margin: EdgeInsets.fromLTRB(0, 12, 0, 0),
-                  buttonColor: Color(0xff8687E7),
-                  onPressed: () {
-                    handleAdd();
-                  },
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
-*/
+
 // function untuk kalo pake panel
   // void handleAdd() {
   //   c.addNote(

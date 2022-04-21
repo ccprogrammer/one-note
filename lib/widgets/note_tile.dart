@@ -96,22 +96,42 @@ class _NoteTileState extends State<NoteTile> {
 
                 // Icon Delete
                 SizedBox(width: 16.w),
-                Container(
-                  padding: EdgeInsets.fromLTRB(4.w, 4.h, 4.w, 4.h),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: Colors.white,
+
+                Stack(
+                  children: [
+                    Image.asset(
+                      'assets/noteicon_playstation.png',
+                      width: 55.w,
                     ),
-                  ),
-                  child: Center(
-                    child: Icon(
-                      Icons.navigate_next,
-                      color: Colors.white,
-                      size: 16.w,
+                    SizedBox(
+                      width: 55.w,
+                      height: 55.h,
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          onTap: () {},
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
+
+                // Container(
+                //   padding: EdgeInsets.fromLTRB(4.w, 4.h, 4.w, 4.h),
+                //   decoration: BoxDecoration(
+                //     shape: BoxShape.circle,
+                //     border: Border.all(
+                //       color: Colors.white,
+                //     ),
+                //   ),
+                //   child: Center(
+                //     child: Icon(
+                //       Icons.navigate_next,
+                //       color: Colors.white,
+                //       size: 16.w,
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           );

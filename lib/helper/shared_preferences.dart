@@ -27,7 +27,6 @@ class prefs {
     final SharedPreferences prefs = await _prefs;
     if (prefs.containsKey(Constants.username)) {
       var prefsUsername = jsonDecode(prefs.getString(Constants.username)!);
-      print(prefsUsername);
       username(prefsUsername);
     }
   }

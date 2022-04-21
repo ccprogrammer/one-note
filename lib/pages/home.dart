@@ -26,17 +26,27 @@ class _AppHomeState extends State<AppHome> {
   final c = NoteControler();
   final textNote = TextEditingController();
   final textDesc = TextEditingController();
-
-  String? username;
+  final textUsername = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+    loadUsername();
     loadData();
   }
 
   // Shared Preferences Section
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
+  void loadUsername() {
+    prefs().loadUsername(
+      username: (name) {
+        textUsername.text = name;
+      },
+    ).then((_) {
+      setState(() {});
+    });
+  }
 
   void saveData() {
     prefs().saveData(data: c.noteList);
@@ -46,9 +56,6 @@ class _AppHomeState extends State<AppHome> {
     prefs()
         .loadData(
       noteList: c.noteList,
-      username: (name) {
-        username = name;
-      },
     )
         .then((_) {
       setState(() {});
@@ -81,14 +88,14 @@ class _AppHomeState extends State<AppHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          final SharedPreferences prefs = await _prefs;
-          prefs.clear();
-        },
-        child: Icon(Icons.clear),
-      ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () async {
+      //     final SharedPreferences prefs = await _prefs;
+      //     prefs.clear();
+      //   },
+      //   child: Icon(Icons.clear),
+      // ),
       backgroundColor: Color(0xff121212),
       appBar: _buildAppBar(),
       body: Stack(
@@ -112,16 +119,66 @@ class _AppHomeState extends State<AppHome> {
 
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
-      centerTitle: true,
+      centerTitle: false,
       elevation: 0,
-      toolbarHeight: 65.h,
+      toolbarHeight: 100.h,
       backgroundColor: Color(0xff121212),
-      title: Text(
-        'UPNOTE',
-        style: TextStyle(
-          fontSize: 22.sp,
-        ),
+      // backgroundColor: Colors.grey,
+      titleSpacing: 24.w,
+      title: Row(
+        children: [
+          Text(
+            'Hello, ',
+            style: TextStyle(
+              fontSize: 22.sp,
+            ),
+          ),
+          Expanded(
+            child: TextField(
+              textAlignVertical: TextAlignVertical.bottom,
+              controller: textUsername,
+              onChanged: (value) {
+                prefs().registerName(username: textUsername.text);
+              },
+              style: TextStyle(
+                  fontSize: 22.sp,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w500),
+              decoration: InputDecoration(
+                hintText: 'What\'s your name?',
+                hintStyle: TextStyle(
+                  color: Color(0xffB2B2B2),
+                ),
+                border: InputBorder.none,
+              ),
+            ),
+          ),
+        ],
       ),
+      actions: [
+        CircleAvatar(
+          radius: 30.0.r,
+          child: SizedBox(
+            width: 60.w,
+            height: 60.h,
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                borderRadius: BorderRadius.circular(50.r),
+                onTap: () {},
+              ),
+            ),
+          ),
+          backgroundImage: NetworkImage(
+            "https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTR8fHBlb3BsZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
+          ),
+          // backgroundImage: AssetImage(
+          //   "assets/icon_no_profile.png",
+          // ),
+          backgroundColor: Colors.transparent,
+        ),
+        SizedBox(width: 24.w),
+      ],
     );
   }
 
@@ -132,14 +189,18 @@ class _AppHomeState extends State<AppHome> {
           children: [
             Container(
               margin: EdgeInsets.fromLTRB(0, 75.h, 0, 0),
-              child: Image.asset(
-                'assets/image_empty.png',
-                width: 227.w,
+              width: 227.w,
+              height: 227.w,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/image_empty.png'),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
             Container(
               child: Text(
-                'What do you want to note ${username ?? ''}?',
+                'What do you want to note?',
                 textAlign: TextAlign.center,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,

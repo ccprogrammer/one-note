@@ -13,7 +13,7 @@ class prefs {
     moreFunction();
   }
 
-  Future register({username}) async {
+  Future registerName({username}) async {
     final SharedPreferences prefs = await _prefs;
     prefs.setString(Constants.username, jsonEncode(username));
   }
@@ -23,15 +23,17 @@ class prefs {
     prefs.setString(Constants.notes, jsonEncode(data));
   }
 
-  Future loadData({username, noteList}) async {
+  Future loadUsername({username}) async {
     final SharedPreferences prefs = await _prefs;
-
     if (prefs.containsKey(Constants.username)) {
       var prefsUsername = jsonDecode(prefs.getString(Constants.username)!);
       print(prefsUsername);
       username(prefsUsername);
     }
+  }
 
+  Future loadData({noteList}) async {
+    final SharedPreferences prefs = await _prefs;
     if (prefs.containsKey(Constants.notes)) {
       final prefsNotes = jsonDecode(prefs.getString(Constants.notes)!);
       for (var i = 0; i < prefsNotes.length; i++) {

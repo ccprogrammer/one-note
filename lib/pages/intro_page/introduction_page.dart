@@ -124,7 +124,7 @@ class _IntroductionPageState extends State<IntroductionPage> {
             )
           : TextButton(
               onPressed: () {
-                handleVisit();
+                _pageBoardController.jumpToPage(pages.length - 1);
               },
               child: Text(
                 'SKIP',
@@ -272,7 +272,6 @@ class RegisterName extends StatefulWidget {
 class _RegisterNameState extends State<RegisterName> {
   var nameController = TextEditingController();
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -298,14 +297,14 @@ class _RegisterNameState extends State<RegisterName> {
                 controller: nameController,
                 textAlign: TextAlign.center,
                 onChanged: (value) {
-                  prefs().register(username: nameController.text);
+                  prefs().registerName(username: nameController.text);
                 },
                 style: TextStyle(
                   color: Colors.white.withOpacity(0.87),
                   fontSize: 22.sp,
                 ),
                 decoration: InputDecoration(
-                  hintText: 'Enter your name here',
+                  hintText: 'Tap to add your name',
                   hintStyle: TextStyle(
                     color: Colors.white.withOpacity(0.67),
                     fontSize: 16.sp,

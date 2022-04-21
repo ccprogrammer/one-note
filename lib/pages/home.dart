@@ -6,6 +6,7 @@ import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/src/size_extension.dart';
 import 'package:list_todo/controllers/note_controller.dart';
+import 'package:list_todo/helper/shared_preferences.dart';
 import 'package:list_todo/pages/add_description_page.dart';
 import 'package:list_todo/widgets/constants.dart';
 import 'package:list_todo/widgets/custom_button.dart';
@@ -37,34 +38,21 @@ class _AppHomeState extends State<AppHome> {
   // Shared Preferences Section
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
-  Future saveData() async {
-    final SharedPreferences prefs = await _prefs;
-    List notes = c.noteList;
-    prefs.setString(Constants.notes, jsonEncode(notes));
+  void saveData() {
+    prefs().saveData(data: c.noteList);
   }
 
-  Future loadData() async {
-    final SharedPreferences prefs = await _prefs;
-
-    if (prefs.containsKey(Constants.username)) {
-      var _username = jsonDecode(prefs.getString(Constants.username)!);
-      username = _username;
-    }
-
-    if (prefs.containsKey(Constants.notes)) {
-      final noteList = prefs.getString(Constants.notes);
-      final notes = jsonDecode(noteList!);
-      for (var i = 0; i < notes.length; i++) {
-        c.noteList.add(notes[i]);
-      }
+  void loadData() {
+    prefs()
+        .loadData(
+      noteList: c.noteList,
+      username: (name) {
+        username = name;
+      },
+    )
+        .then((_) {
       setState(() {});
-    }
-  }
-
-  Future deleteData() async {
-    final SharedPreferences prefs = await _prefs;
-    prefs.remove(Constants.notes);
-    saveData();
+    });
   }
 
 // Handler
@@ -86,13 +74,21 @@ class _AppHomeState extends State<AppHome> {
 
   void handleDelete(id) {
     c.deleteNote(id);
-    deleteData();
+    saveData();
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          final SharedPreferences prefs = await _prefs;
+          prefs.clear();
+        },
+        child: Icon(Icons.clear),
+      ),
       backgroundColor: Color(0xff121212),
       appBar: _buildAppBar(),
       body: Stack(
@@ -143,8 +139,7 @@ class _AppHomeState extends State<AppHome> {
             ),
             Container(
               child: Text(
-                
-                'What do you want to note $username?',
+                'What do you want to note ${username ?? ''}?',
                 textAlign: TextAlign.center,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,

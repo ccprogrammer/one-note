@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/src/size_extension.dart';
+import 'package:list_todo/helper/shared_preferences.dart';
 import 'package:list_todo/pages/home.dart';
 import 'package:list_todo/widgets/constants.dart';
 import 'package:list_todo/widgets/custom_button.dart';
@@ -42,19 +43,18 @@ class _IntroductionPageState extends State<IntroductionPage> {
     RegisterName(),
   ];
 
-  // Shared Preferences Section
-  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-
-  Future isVisited() async {
-    final SharedPreferences prefs = await _prefs;
-    // prefs.setBool('is_visited', true);
-    Navigator.pushAndRemoveUntil(
-      context,
-      PageTransition(
-        type: PageTransitionType.fade,
-        child: AppHome(),
-      ),
-      (route) => false,
+  void handleVisit() {
+    prefs().isVisited(
+      moreFunction: () {
+        Navigator.pushAndRemoveUntil(
+          context,
+          PageTransition(
+            type: PageTransitionType.fade,
+            child: AppHome(),
+          ),
+          (route) => false,
+        );
+      },
     );
   }
 
@@ -124,7 +124,7 @@ class _IntroductionPageState extends State<IntroductionPage> {
             )
           : TextButton(
               onPressed: () {
-                isVisited();
+                handleVisit();
               },
               child: Text(
                 'SKIP',
@@ -163,7 +163,7 @@ class _IntroductionPageState extends State<IntroductionPage> {
             CustomButton(
               width: currentPage == pages.length - 1 ? 140.w : 90.w,
               onPressed: () {
-                currentPage == pages.length - 1 ? isVisited() : nextPage();
+                currentPage == pages.length - 1 ? handleVisit() : nextPage();
               },
               title: currentPage == pages.length - 1 ? 'GET STARTED' : 'NEXT',
             ),
@@ -182,7 +182,7 @@ class _IntroductionPageState extends State<IntroductionPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          for (var i = 0; i < pages.length; i++)
+          for (var i = 0; i < pages.length - 1; i++)
             AnimatedContainer(
               duration: Duration(milliseconds: 200),
               width: currentPage == i ? 20.0.w : 8.0.w,
@@ -272,13 +272,6 @@ class RegisterName extends StatefulWidget {
 class _RegisterNameState extends State<RegisterName> {
   var nameController = TextEditingController();
 
-  // Shared Preferences Section
-  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-
-  Future register() async {
-    final SharedPreferences prefs = await _prefs;
-    prefs.setString(Constants.username, jsonEncode(nameController.text));
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -305,7 +298,7 @@ class _RegisterNameState extends State<RegisterName> {
                 controller: nameController,
                 textAlign: TextAlign.center,
                 onChanged: (value) {
-                  register();
+                  prefs().register(username: nameController.text);
                 },
                 style: TextStyle(
                   color: Colors.white.withOpacity(0.87),

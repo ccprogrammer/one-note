@@ -22,7 +22,6 @@ class _SplashScreenState extends State<SplashScreen> {
     final SharedPreferences prefs = await _prefs;
     Timer(Duration(seconds: 2), () {
       if (prefs.containsKey(Constants.isVisited)) {
-        prefs.remove(Constants.isVisited);
         Navigator.pushAndRemoveUntil(
           context,
           PageTransition(

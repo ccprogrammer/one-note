@@ -28,9 +28,17 @@ class _AppHomeState extends State<AppHome> {
   final textDesc = TextEditingController();
   final textUsername = TextEditingController();
 
+  List greetingList = [
+    {'value': 'Hi, '},
+    {'value': 'Hello, '},
+    {'value': 'What\'s up, '},
+  ];
+  String greetings = 'Hi';
+
   @override
   void initState() {
     super.initState();
+    randomGreetings();
     loadUsername();
     loadData();
   }
@@ -46,6 +54,10 @@ class _AppHomeState extends State<AppHome> {
     ).then((_) {
       setState(() {});
     });
+  }
+
+  void randomGreetings() {
+    greetings = greetingList[Random().nextInt(greetingList.length)]['value'];
   }
 
   void saveData() {
@@ -98,21 +110,26 @@ class _AppHomeState extends State<AppHome> {
       // ),
       backgroundColor: Color(0xff121212),
       appBar: _buildAppBar(),
-      body: Stack(
-        children: [
-          _buildNoteList(),
-          _buildBottomButton(),
-          // SlidingUpPanel(
-          //   controller: _panelC,
-          //   maxHeight: height * 0.5,
-          //   minHeight: 1,
-          //   onPanelClosed: () {
-          //     clearTextField();
-          //   },
-          //   color: Colors.transparent,
-          //   panel: _buildPanel(context),
-          // ),
-        ],
+      body: GestureDetector(
+        onTap: () {
+          FocusManager.instance.primaryFocus?.unfocus();
+        },
+        child: Stack(
+          children: [
+            _buildNoteList(),
+            _buildBottomButton(),
+            // SlidingUpPanel(
+            //   controller: _panelC,
+            //   maxHeight: height * 0.5,
+            //   minHeight: 1,
+            //   onPanelClosed: () {
+            //     clearTextField();
+            //   },
+            //   color: Colors.transparent,
+            //   panel: _buildPanel(context),
+            // ),
+          ],
+        ),
       ),
     );
   }
@@ -128,7 +145,7 @@ class _AppHomeState extends State<AppHome> {
       title: Row(
         children: [
           Text(
-            'Hello, ',
+            greetings,
             style: TextStyle(
               fontSize: 22.sp,
             ),
@@ -137,6 +154,7 @@ class _AppHomeState extends State<AppHome> {
             child: TextField(
               textAlignVertical: TextAlignVertical.bottom,
               controller: textUsername,
+              maxLength: 16,
               onChanged: (value) {
                 prefs().registerName(username: textUsername.text);
               },
@@ -150,35 +168,13 @@ class _AppHomeState extends State<AppHome> {
                   color: Color(0xffB2B2B2),
                 ),
                 border: InputBorder.none,
+                counterText: '',
               ),
             ),
           ),
         ],
       ),
-      actions: [
-        CircleAvatar(
-          radius: 30.0.r,
-          child: SizedBox(
-            width: 60.w,
-            height: 60.h,
-            child: Material(
-              color: Colors.transparent,
-              child: InkWell(
-                borderRadius: BorderRadius.circular(50.r),
-                onTap: () {},
-              ),
-            ),
-          ),
-          backgroundImage: NetworkImage(
-            "https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTR8fHBlb3BsZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
-          ),
-          // backgroundImage: AssetImage(
-          //   "assets/icon_no_profile.png",
-          // ),
-          backgroundColor: Colors.transparent,
-        ),
-        SizedBox(width: 24.w),
-      ],
+      actions: [],
     );
   }
 

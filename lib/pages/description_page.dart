@@ -90,46 +90,41 @@ class _DescriptionPageState extends State<DescriptionPage> {
             ],
           ),
         ),
-        body: GestureDetector(
-          onTap: () {
-            removeFocus();
-          },
-          child: ListView(
-            children: [
-              // Title TextField
-              Container(
-                margin: EdgeInsets.fromLTRB(24.w, 0, 24.w, 0),
-                child: Focus(
-                  onFocusChange: (focus) {
-                    onFocusChange();
-                  },
-                  child: CustomInputTextField(
-                    controller: textNote,
-                    hintText: 'Title',
-                    color: Colors.white54,
-                    fontSize: 26.sp,
-                  ),
+        body: ListView(
+          children: [
+            // Title TextField
+            Container(
+              margin: EdgeInsets.fromLTRB(24.w, 0, 24.w, 0),
+              child: Focus(
+                onFocusChange: (focus) {
+                  onFocusChange();
+                },
+                child: CustomInputTextField(
+                  controller: textNote,
+                  hintText: 'Title',
+                  color: Colors.white54,
+                  fontSize: 26.sp,
                 ),
               ),
+            ),
 
-              // Description TextField
-              Container(
-                alignment: Alignment.centerLeft,
-                margin: EdgeInsets.fromLTRB(24.w, 6.h, 24.w, 18.h),
-                child: Focus(
-                  onFocusChange: (focus) {
-                    onFocusChange();
-                  },
-                  child: CustomInputTextField(
-                    controller: textDesc,
-                    hintText: 'Description',
-                    color: Colors.white38,
-                    fontSize: 16.sp,
-                  ),
+            // Description TextField
+            Container(
+              alignment: Alignment.centerLeft,
+              margin: EdgeInsets.fromLTRB(24.w, 6.h, 24.w, 18.h),
+              child: Focus(
+                onFocusChange: (focus) {
+                  onFocusChange();
+                },
+                child: CustomInputTextField(
+                  controller: textDesc,
+                  hintText: 'Description',
+                  color: Colors.white38,
+                  fontSize: 16.sp,
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

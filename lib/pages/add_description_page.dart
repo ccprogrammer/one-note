@@ -59,8 +59,8 @@ class _AddDescriptionPageState extends State<AddDescriptionPage> {
                   removeFocus();
                   handleSave();
                   // it's a weird bug, the add button will stay in center for a few milliseconds then move to bottom if Future.delayed not applied wait... it's not a bug it's a new hidden feature !!!! AMAZING !!!
-                  Future.delayed(Duration(milliseconds: 100), () {
-                    return Navigator.pop(context);
+                  Future.delayed(Duration(milliseconds: 200), () {
+                    Navigator.pop(context);
                   });
                 },
                 icon: Icons.close,
@@ -78,46 +78,41 @@ class _AddDescriptionPageState extends State<AddDescriptionPage> {
             ],
           ),
         ),
-        body: GestureDetector(
-          onTap: () {
-            removeFocus();
-          },
-          child: ListView(
-            children: [
-              // Title TextField
-              Container(
-                margin: EdgeInsets.fromLTRB(24.w, 0, 24.w, 0),
-                child: Focus(
-                  onFocusChange: (focus) {
-                    onFocusChange();
-                  },
-                  child: CustomInputTextField(
-                    controller: textNote,
-                    hintText: 'Title',
-                    color: Colors.white54,
-                    fontSize: 26.sp,
-                  ),
+        body: ListView(
+          children: [
+            // Title TextField
+            Container(
+              margin: EdgeInsets.fromLTRB(24.w, 0, 24.w, 0),
+              child: Focus(
+                onFocusChange: (focus) {
+                  onFocusChange();
+                },
+                child: CustomInputTextField(
+                  controller: textNote,
+                  hintText: 'Title',
+                  color: Colors.white54,
+                  fontSize: 26.sp,
                 ),
               ),
+            ),
 
-              // Description TextField
-              Container(
-                alignment: Alignment.centerLeft,
-                margin: EdgeInsets.fromLTRB(24.w, 6.h, 24.w, 18.h),
-                child: Focus(
-                  onFocusChange: (focus) {
-                    onFocusChange();
-                  },
-                  child: CustomInputTextField(
-                    controller: textDesc,
-                    hintText: 'Description',
-                    color: Colors.white38,
-                    fontSize: 16.sp,
-                  ),
+            // Description TextField
+            Container(
+              alignment: Alignment.centerLeft,
+              margin: EdgeInsets.fromLTRB(24.w, 6.h, 24.w, 18.h),
+              child: Focus(
+                onFocusChange: (focus) {
+                  onFocusChange();
+                },
+                child: CustomInputTextField(
+                  controller: textDesc,
+                  hintText: 'Description',
+                  color: Colors.white38,
+                  fontSize: 16.sp,
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

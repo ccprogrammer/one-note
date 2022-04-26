@@ -161,10 +161,12 @@ class _AppHomeState extends State<AppHome> {
               _buildBottomButton(),
               SlidingUpPanel(
                 controller: _panelC,
-                // maxHeight: MediaQuery.of(context).size.height * 0.5,
                 minHeight: 0,
                 onPanelClosed: () {},
-                color: Colors.transparent,
+                color: Color(0xff363636),
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(16),
+                ),
                 panelBuilder: (controller) {
                   return _buildPanel(
                     context: context,
@@ -365,12 +367,6 @@ class _AppHomeState extends State<AppHome> {
     return Stack(
       children: [
         Container(
-          decoration: BoxDecoration(
-            color: Color(0xff363636),
-            borderRadius: BorderRadius.vertical(
-              top: Radius.circular(16),
-            ),
-          ),
           width: double.infinity,
           child: Column(
             children: [
@@ -402,8 +398,8 @@ class _AppHomeState extends State<AppHome> {
                       GridView.builder(
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 3,
-                          crossAxisSpacing: 30.w,
-                          mainAxisSpacing: 30.h,
+                          crossAxisSpacing: 35.w,
+                          mainAxisSpacing: 35.h,
                           // mainAxisExtent: 80,
                         ),
                         primary: false,
@@ -442,37 +438,17 @@ class _AppHomeState extends State<AppHome> {
           left: 24.w,
           right: 24.w,
           child: CustomButton(
-            title: 'Add Category',
-            onPressed: () {},
+            title: 'Close',
+            style: TextStyle(
+              fontSize: 18,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              _panelC.close();
+            },
           ),
         ),
       ],
     );
   }
-
-// function untuk kalo pake panel
-  // void handleAdd() {
-  //   c.addNote(
-  //     Random().nextInt(100),
-  //     textNote.text,
-  //     textDesc.text,
-  //   );
-  //   saveData();
-  //   _panelC.close();
-  //   setState(() {});
-
-  //   // dismiss keyboard on complete
-  //   FocusScopeNode currentFocus = FocusScope.of(context);
-  //   if (!currentFocus.hasPrimaryFocus) {
-  //     currentFocus.unfocus();
-  //   }
-  // }
-  // void handlePopPanel() {
-  //   if (_panelC.isPanelOpen) {
-  //     _panelC.close();
-  //   } else {
-  //     // ketika panel terbuka panel akan di tutup, ketika panel tertutup this.exit akan menjadi true dan secara otomatis akan kembail ke halaman sebelumnya
-  //     this.exit = true;
-  //   }
-  // }
 }

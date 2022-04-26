@@ -46,95 +46,101 @@ class _NoteTileState extends State<NoteTile> {
         openColor: Color(0xff4C4C4C).withOpacity(0.6),
         transitionDuration: Duration(milliseconds: 650),
         closedBuilder: (context, action) {
-          return Padding(
-            padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 16.h),
-            child: Row(
-              children: [
-                // Note
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      // Note Title
-                      Container(
-                        child: Text(
-                          widget.item['note'] ?? 'Empty Note',
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                          style: TextStyle(
-                            fontSize: 16.sp,
-                            color: Colors.white,
+          return InkWell(
+            onTap: () {
+              action();
+            },
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 16.h),
+              child: Row(
+                children: [
+                  // Note
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        // Note Title
+                        Container(
+                          child: Text(
+                            widget.item['note'] ?? 'Empty Note',
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            style: TextStyle(
+                              fontSize: 16.sp,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
-                      ),
 
-                      // Note Description
-                      Container(
-                        child: Text(
-                          widget.item['description'] ?? 'Empty Description',
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                          style: TextStyle(
-                            fontSize: 12.sp,
-                            color: Colors.white70,
+                        // Note Description
+                        Container(
+                          child: Text(
+                            widget.item['description'] ?? 'Empty Description',
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            style: TextStyle(
+                              fontSize: 12.sp,
+                              color: Colors.white70,
+                            ),
                           ),
                         ),
-                      ),
 
-                      // Note Date
-                      Container(
-                        child: _buildDateTiem(),
-                      ),
-                    ],
+                        // Note Date
+                        Container(
+                          child: _buildDateTiem(),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                // Divider
-                SizedBox(width: 42.w),
-                Container(
-                  width: 2.w,
-                  color: Color(0xff979797),
-                ),
+                  // Divider
+                  SizedBox(width: 42.w),
+                  Container(
+                    width: 2.w,
+                    color: Color(0xff979797),
+                  ),
 
-                // Icon Delete
-                SizedBox(width: 16.w),
-                Container(
-                  width: 55.w,
-                  height: 55.h,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage(
-                        '${widget.item['icon'] ?? 'assets/category/noteicon_add.png'}',
+                  // Icon Delete
+                  SizedBox(width: 16.w),
+                  Container(
+                    width: 55.w,
+                    height: 55.h,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage(
+                          '${widget.item['icon'] ?? 'assets/category/noteicon_add.png'}',
+                        ),
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: () {
+                          widget.changeIcon(widget.index);
+                        },
                       ),
                     ),
                   ),
-                  child: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      onTap: () {
-                        widget.changeIcon(widget.index);
-                      },
-                    ),
-                  ),
-                ),
 
-                // Container(
-                //   padding: EdgeInsets.fromLTRB(4.w, 4.h, 4.w, 4.h),
-                //   decoration: BoxDecoration(
-                //     shape: BoxShape.circle,
-                //     border: Border.all(
-                //       color: Colors.white,
-                //     ),
-                //   ),
-                //   child: Center(
-                //     child: Icon(
-                //       Icons.navigate_next,
-                //       color: Colors.white,
-                //       size: 16.w,
-                //     ),
-                //   ),
-                // ),
-              ],
+                  // Container(
+                  //   padding: EdgeInsets.fromLTRB(4.w, 4.h, 4.w, 4.h),
+                  //   decoration: BoxDecoration(
+                  //     shape: BoxShape.circle,
+                  //     border: Border.all(
+                  //       color: Colors.white,
+                  //     ),
+                  //   ),
+                  //   child: Center(
+                  //     child: Icon(
+                  //       Icons.navigate_next,
+                  //       color: Colors.white,
+                  //       size: 16.w,
+                  //     ),
+                  //   ),
+                  // ),
+                ],
+              ),
             ),
           );
         },

@@ -162,7 +162,7 @@ class _AppHomeState extends State<AppHome> {
               SlidingUpPanel(
                 controller: _panelC,
                 // maxHeight: MediaQuery.of(context).size.height * 0.5,
-                minHeight: 1,
+                minHeight: 0,
                 onPanelClosed: () {},
                 color: Colors.transparent,
                 panelBuilder: (controller) {

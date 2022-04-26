@@ -14,7 +14,8 @@ class CustomButton extends StatefulWidget {
     this.titleColor,
     this.isIcon = false,
     this.icon,
-    required this.onPressed, this.style,
+    required this.onPressed,
+    this.style,
   }) : super(key: key);
   final double? height;
   final double? width;
@@ -39,16 +40,19 @@ class _CustomButtonState extends State<CustomButton> {
     return Container(
       margin: widget.margin,
       padding: widget.padding,
-      height: widget.height,
+      height: widget.height ?? 50.h,
       width: widget.width ?? double.infinity,
-      decoration: BoxDecoration(
-        color: widget.buttonColor ?? Color(0xff8687E7),
-        border: Border.all(
-          color: widget.borderColor ?? Color(0xff8687E7),
-        ),
-        borderRadius: BorderRadius.circular(4.r),
-      ),
       child: TextButton(
+        style: TextButton.styleFrom(
+          backgroundColor: widget.buttonColor ?? Color(0xff8687E7),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4.r),
+          ),
+          side: BorderSide(
+            color: widget.borderColor ?? Color(0xff8687E7),
+            width: 1.w,
+          ),
+        ),
         onPressed: () {
           widget.onPressed();
         },
@@ -60,10 +64,11 @@ class _CustomButtonState extends State<CustomButton> {
               )
             : Text(
                 widget.title ?? 'onPressed',
-                style: widget.style ?? TextStyle(
-                  fontSize: 16.sp,
-                  color: widget.titleColor ?? Colors.white,
-                ),
+                style: widget.style ??
+                    TextStyle(
+                      fontSize: 16.sp,
+                      color: widget.titleColor ?? Colors.white,
+                    ),
               ),
       ),
     );

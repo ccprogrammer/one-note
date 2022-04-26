@@ -129,6 +129,7 @@ class _IntroductionPageState extends State<IntroductionPage> {
               child: Text(
                 'SKIP',
                 style: TextStyle(
+                  fontFamily: Constants.lato,
                   fontWeight: FontWeight.w700,
                   fontSize: 16.sp,
                   color: Colors.white.withOpacity(0.4),
@@ -152,6 +153,7 @@ class _IntroductionPageState extends State<IntroductionPage> {
               },
               title: 'BACK',
               style: TextStyle(
+                fontFamily: Constants.lato,
                 fontWeight: FontWeight.w700,
                 fontSize: 16.sp,
                 color: Colors.white.withOpacity(0.4),
@@ -238,6 +240,7 @@ class _IntroTabState extends State<IntroTab> {
                 widget.title,
                 textAlign: TextAlign.center,
                 style: TextStyle(
+                  fontFamily: Constants.lato,
                   color: Colors.white.withOpacity(0.87),
                   fontSize: 32.sp,
                   fontWeight: FontWeight.bold,
@@ -250,6 +253,7 @@ class _IntroTabState extends State<IntroTab> {
                 widget.subTitle,
                 textAlign: TextAlign.center,
                 style: TextStyle(
+                  fontFamily: Constants.lato,
                   color: Colors.white.withOpacity(0.87),
                   fontSize: 16.sp,
                 ),
@@ -285,6 +289,7 @@ class _RegisterNameState extends State<RegisterName> {
                 'Welcome to UpNote',
                 textAlign: TextAlign.center,
                 style: TextStyle(
+                  fontFamily: Constants.lato,
                   color: Colors.white.withOpacity(0.87),
                   fontSize: 32.sp,
                   fontWeight: FontWeight.bold,
@@ -300,12 +305,14 @@ class _RegisterNameState extends State<RegisterName> {
                   prefs().registerName(username: nameController.text);
                 },
                 style: TextStyle(
+                  fontFamily: Constants.lato,
                   color: Colors.white.withOpacity(0.87),
                   fontSize: 22.sp,
                 ),
                 decoration: InputDecoration(
                   hintText: 'Tap to add your name',
                   hintStyle: TextStyle(
+                    fontFamily: Constants.lato,
                     color: Colors.white.withOpacity(0.67),
                     fontSize: 16.sp,
                   ),

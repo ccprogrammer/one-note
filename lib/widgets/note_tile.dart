@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/src/size_extension.dart';
 import 'package:list_todo/pages/description_page.dart';
 import 'package:intl/intl.dart';
+import 'package:list_todo/widgets/constants.dart';
 
 class NoteTile extends StatefulWidget {
   const NoteTile({
@@ -67,6 +68,7 @@ class _NoteTileState extends State<NoteTile> {
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
                             style: TextStyle(
+                              fontFamily: Constants.lato,
                               fontSize: 16.sp,
                               color: Colors.white,
                             ),
@@ -80,6 +82,7 @@ class _NoteTileState extends State<NoteTile> {
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
                             style: TextStyle(
+                              fontFamily: Constants.lato,
                               fontSize: 12.sp,
                               color: Colors.white70,
                             ),
@@ -122,23 +125,6 @@ class _NoteTileState extends State<NoteTile> {
                       ),
                     ),
                   ),
-
-                  // Container(
-                  //   padding: EdgeInsets.fromLTRB(4.w, 4.h, 4.w, 4.h),
-                  //   decoration: BoxDecoration(
-                  //     shape: BoxShape.circle,
-                  //     border: Border.all(
-                  //       color: Colors.white,
-                  //     ),
-                  //   ),
-                  //   child: Center(
-                  //     child: Icon(
-                  //       Icons.navigate_next,
-                  //       color: Colors.white,
-                  //       size: 16.w,
-                  //     ),
-                  //   ),
-                  // ),
                 ],
               ),
             ),
@@ -164,14 +150,22 @@ class _NoteTileState extends State<NoteTile> {
         widget.item['hour'] ?? 'Empty Hour',
         overflow: TextOverflow.ellipsis,
         maxLines: 1,
-        style: TextStyle(color: Colors.white54, fontSize: 12.sp),
+        style: TextStyle(
+          color: Colors.white54,
+          fontSize: 12.sp,
+          fontFamily: Constants.lato,
+        ),
       );
     } else {
       return Text(
         '${widget.item['date']}, ${widget.item['year']}',
         overflow: TextOverflow.ellipsis,
         maxLines: 1,
-        style: TextStyle(color: Colors.white54, fontSize: 12.sp),
+        style: TextStyle(
+          color: Colors.white54,
+          fontSize: 12.sp,
+          fontFamily: Constants.lato,
+        ),
       );
     }
   }

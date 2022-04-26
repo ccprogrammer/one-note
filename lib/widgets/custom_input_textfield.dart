@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/src/size_extension.dart';
+import 'package:list_todo/widgets/constants.dart';
 
 class CustomInputTextField extends StatefulWidget {
   CustomInputTextField({
@@ -27,12 +28,14 @@ class _CustomInputTextFieldState extends State<CustomInputTextField> {
       textAlignVertical: TextAlignVertical.center,
       maxLines: null,
       style: TextStyle(
+        fontFamily: Constants.lato,
         color: Colors.white.withOpacity(0.85),
         fontSize: widget.fontSize ?? 26.sp,
       ),
       decoration: InputDecoration(
         hintText: widget.hintText,
         hintStyle: TextStyle(
+          fontFamily: Constants.lato,
           color: widget.color ?? Colors.white54,
         ),
         border: InputBorder.none,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/src/size_extension.dart';
+import 'package:list_todo/widgets/constants.dart';
 
 class CustomButton extends StatefulWidget {
   const CustomButton({
@@ -66,6 +67,7 @@ class _CustomButtonState extends State<CustomButton> {
                 widget.title ?? 'onPressed',
                 style: widget.style ??
                     TextStyle(
+                      fontFamily: Constants.lato,
                       fontSize: 16.sp,
                       color: widget.titleColor ?? Colors.white,
                     ),

@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/src/size_extension.dart';
 import 'package:list_todo/controllers/note_controller.dart';
 import 'package:list_todo/helper/shared_preferences.dart';
 import 'package:list_todo/pages/add_description_page.dart';
+import 'package:list_todo/widgets/constants.dart';
 import 'package:list_todo/widgets/custom_button.dart';
 import 'package:list_todo/widgets/note_tile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -68,6 +69,8 @@ class _AppHomeState extends State<AppHome> {
     },
   ];
   int? noteIndex;
+
+  double onPanelOpenHeight = 0.16;
 
   @override
   void initState() {
@@ -137,6 +140,11 @@ class _AppHomeState extends State<AppHome> {
     setState(() {});
   }
 
+  void handlePanelOpenHeight(bool open) {
+    open == true ? onPanelOpenHeight = 0.65 : onPanelOpenHeight = 0.16;
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -159,24 +167,7 @@ class _AppHomeState extends State<AppHome> {
             children: [
               _buildNoteList(),
               _buildBottomButton(),
-              SlidingUpPanel(
-                controller: _panelC,
-                minHeight: 0,
-                onPanelClosed: () {},
-                color: Color(0xff363636),
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(16),
-                ),
-                panelBuilder: (controller) {
-                  return _buildPanel(
-                    context: context,
-                    controller: controller,
-                    changeNoteIcon: (value) {
-                      handleChangeIcon(value);
-                    },
-                  );
-                },
-              ),
+              _buildSlidingUpPanel(),
             ],
           ),
         ),
@@ -196,6 +187,7 @@ class _AppHomeState extends State<AppHome> {
           Text(
             greetings,
             style: TextStyle(
+              fontFamily: Constants.lato,
               fontSize: 22.sp,
             ),
           ),
@@ -208,9 +200,11 @@ class _AppHomeState extends State<AppHome> {
                 prefs().registerName(username: textUsername.text);
               },
               style: TextStyle(
-                  fontSize: 22.sp,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w500),
+                fontSize: 22.sp,
+                fontFamily: Constants.lato,
+                color: Colors.white,
+                fontWeight: FontWeight.w500,
+              ),
               decoration: InputDecoration(
                 hintText: 'What\'s your name?',
                 hintStyle: TextStyle(
@@ -228,7 +222,20 @@ class _AppHomeState extends State<AppHome> {
   }
 
   Widget _buildNoteList() {
-    if (c.noteList.length == 0) {
+    if (c.noteList.length > 0) {
+      return ListView(
+        children: [
+          Column(
+            children: [
+              for (var i = 0; i < c.noteList.length; i++) _buildNotes(i),
+              SizedBox(
+                  height:
+                      MediaQuery.of(context).size.height * onPanelOpenHeight),
+            ],
+          ),
+        ],
+      );
+    } else {
       return Center(
         child: Column(
           children: [
@@ -267,17 +274,6 @@ class _AppHomeState extends State<AppHome> {
             ),
           ],
         ),
-      );
-    } else {
-      return ListView(
-        children: [
-          Column(
-            children: [
-              for (var i = 0; i < c.noteList.length; i++) _buildNotes(i),
-              SizedBox(height: 120.h),
-            ],
-          ),
-        ],
       );
     }
   }
@@ -449,6 +445,33 @@ class _AppHomeState extends State<AppHome> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildSlidingUpPanel() {
+    return SlidingUpPanel(
+      controller: _panelC,
+      minHeight: 0,
+      onPanelOpened: () {
+        handlePanelOpenHeight(true);
+      },
+      onPanelClosed: () {
+        handlePanelOpenHeight(false);
+      },
+      panelSnapping: false,
+      color: Color(0xff363636),
+      borderRadius: BorderRadius.vertical(
+        top: Radius.circular(16),
+      ),
+      panelBuilder: (controller) {
+        return _buildPanel(
+          context: context,
+          controller: controller,
+          changeNoteIcon: (value) {
+            handleChangeIcon(value);
+          },
+        );
+      },
     );
   }
 }

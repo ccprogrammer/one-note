@@ -286,7 +286,7 @@ class _RegisterNameState extends State<RegisterName> {
             Container(
               margin: EdgeInsets.fromLTRB(24.w, 58.h, 24.w, 0),
               child: Text(
-                'Welcome to UpNote',
+                'Welcome to OneNote',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: Constants.lato,

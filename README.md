@@ -5,7 +5,11 @@ This is just a simple note app with bunch of animation and common feature Create
 
 
 
-https://user-images.githubusercontent.com/90954993/166099022-f121d1e4-53b2-4fa1-95d5-fd9edd8e0e0d.mp4
+
+https://user-images.githubusercontent.com/90954993/166099340-8ff02350-7b07-478f-a133-1a398a781cdd.mp4
+
+
+
 
 
 

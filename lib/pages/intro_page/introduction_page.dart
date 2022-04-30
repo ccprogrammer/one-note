@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/src/size_extension.dart';
-import 'package:list_todo/pages/home.dart';
-import 'package:list_todo/widgets/custom_button.dart';
+import 'package:one_note/controllers/shared_preferences.dart';
+import 'package:one_note/pages/home.dart';
+import 'package:one_note/widgets/constants.dart';
+import 'package:one_note/widgets/custom_button.dart';
 import 'package:page_transition/page_transition.dart';
 
 class IntroductionPage extends StatefulWidget {
@@ -34,59 +36,102 @@ class _IntroductionPageState extends State<IntroductionPage> {
       subTitle:
           'You can organize your daily tasks by adding your tasks into separate categories',
     ),
+    RegisterName(),
   ];
+
+  void handleVisit() {
+    prefs().isVisited(
+      moreFunction: () {
+        Navigator.pushAndRemoveUntil(
+          context,
+          PageTransition(
+            type: PageTransitionType.fade,
+            child: AppHome(),
+          ),
+          (route) => false,
+        );
+      },
+    );
+  }
+
+  void nextPage() {
+    _pageBoardController.nextPage(
+      duration: Duration(microseconds: 500),
+      curve: Curves.linear,
+    );
+  }
+
+  void previousPage() {
+    _pageBoardController.previousPage(
+      duration: Duration(microseconds: 500),
+      curve: Curves.linear,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0xff121212),
-      appBar: _buildAppBar(),
-      bottomNavigationBar: _buildBottomAppBar(),
-      body: Stack(
-        children: [
-          PageView(
-            controller: _pageBoardController,
-            onPageChanged: (value) {
-              currentPage = value;
-              setState(() {});
-            },
-            pageSnapping: true,
-            children: [
-              for (var i = 0; i < pages.length; i++) pages[i],
-            ],
-          ),
-          // Index Dot
-          _buildPageIndexIndicator(),
-        ],
+    return WillPopScope(
+      onWillPop: () async {
+        previousPage();
+        return false;
+      },
+      child: Scaffold(
+        backgroundColor: Color(0xff121212),
+        appBar: _buildAppBar(),
+        bottomNavigationBar: _buildBottomAppBar(),
+        body: Stack(
+          children: [
+            PageView(
+              controller: _pageBoardController,
+              onPageChanged: (value) {
+                currentPage = value;
+                setState(() {});
+              },
+              pageSnapping: true,
+              children: [
+                for (var i = 0; i < pages.length; i++) pages[i],
+              ],
+            ),
+            currentPage == pages.length - 1
+                ? Container()
+                : _buildPageIndexIndicator(),
+          ],
+        ),
       ),
     );
   }
 
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
+      iconTheme: IconThemeData(color: Colors.white),
       backgroundColor: Color(0xff121212),
       elevation: 0,
       automaticallyImplyLeading: false,
-      title: TextButton(
-        onPressed: () {
-          Navigator.pushAndRemoveUntil(
-            context,
-            PageTransition(
-              type: PageTransitionType.fade,
-              child: AppHome(),
+      title: currentPage == pages.length - 1
+          ? IconButton(
+              onPressed: () {
+                previousPage();
+              },
+              padding: EdgeInsets.zero,
+              constraints: BoxConstraints(),
+              icon: Icon(
+                Icons.chevron_left,
+              ),
+            )
+          : TextButton(
+              onPressed: () {
+                _pageBoardController.jumpToPage(pages.length - 1);
+              },
+              child: Text(
+                'SKIP',
+                style: TextStyle(
+                  fontFamily: Constants.lato,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 16.sp,
+                  color: Colors.white.withOpacity(0.4),
+                ),
+              ),
             ),
-            (route) => false,
-          );
-        },
-        child: Text(
-          'SKIP',
-          style: TextStyle(
-            fontWeight: FontWeight.w700,
-            fontSize: 16.sp,
-            color: Colors.white.withOpacity(0.4),
-          ),
-        ),
-      ),
     );
   }
 
@@ -94,19 +139,17 @@ class _IntroductionPageState extends State<IntroductionPage> {
     return BottomAppBar(
       color: Color(0xff121212),
       child: Container(
-        margin: EdgeInsets.fromLTRB(0, 24.h, 24.h, 24.h),
+        margin: EdgeInsets.fromLTRB(0, 24.h, 24.w, 24.h),
         child: Row(
           children: [
             CustomButton(
               width: 90.w,
               onPressed: () {
-                _pageBoardController.previousPage(
-                  duration: Duration(microseconds: 500),
-                  curve: Curves.linear,
-                );
+                previousPage();
               },
               title: 'BACK',
               style: TextStyle(
+                fontFamily: Constants.lato,
                 fontWeight: FontWeight.w700,
                 fontSize: 16.sp,
                 color: Colors.white.withOpacity(0.4),
@@ -116,21 +159,9 @@ class _IntroductionPageState extends State<IntroductionPage> {
             ),
             Spacer(),
             CustomButton(
-              width: currentPage == pages.length - 1 ? 140.sp : 90.sp,
+              width: currentPage == pages.length - 1 ? 140.w : 90.w,
               onPressed: () {
-                currentPage == pages.length - 1
-                    ? Navigator.pushAndRemoveUntil(
-                        context,
-                        PageTransition(
-                          type: PageTransitionType.fade,
-                          child: AppHome(),
-                        ),
-                        (route) => false,
-                      )
-                    : _pageBoardController.nextPage(
-                        duration: Duration(microseconds: 500),
-                        curve: Curves.linear,
-                      );
+                currentPage == pages.length - 1 ? handleVisit() : nextPage();
               },
               title: currentPage == pages.length - 1 ? 'GET STARTED' : 'NEXT',
             ),
@@ -145,16 +176,16 @@ class _IntroductionPageState extends State<IntroductionPage> {
       bottom: 0,
       left: 0,
       right: 0,
-      top: 140.sp,
+      top: 140.h,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          for (var i = 0; i < pages.length; i++)
+          for (var i = 0; i < pages.length - 1; i++)
             AnimatedContainer(
               duration: Duration(milliseconds: 200),
-              width: currentPage == i ? 20.0.sp : 8.0.sp,
-              height: 4.0.sp,
-              margin: EdgeInsets.fromLTRB(4.sp, 0, 4.sp, 0),
+              width: currentPage == i ? 20.0.w : 8.0.w,
+              height: 4.0.h,
+              margin: EdgeInsets.fromLTRB(4.w, 0, 4.w, 0),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(50),
                 color: currentPage == i
@@ -194,17 +225,18 @@ class _IntroTabState extends State<IntroTab> {
             Container(
               child: Image.asset(
                 widget.image,
-                width: 270.sp,
-                height: 300.sp,
+                width: 270.w,
+                height: 300.h,
               ),
             ),
             Spacer(),
             Container(
-              margin: EdgeInsets.fromLTRB(24.sp, 0, 24.sp, 0),
+              margin: EdgeInsets.fromLTRB(24.w, 0, 24.w, 0),
               child: Text(
                 widget.title,
                 textAlign: TextAlign.center,
                 style: TextStyle(
+                  fontFamily: Constants.lato,
                   color: Colors.white.withOpacity(0.87),
                   fontSize: 32.sp,
                   fontWeight: FontWeight.bold,
@@ -212,13 +244,75 @@ class _IntroTabState extends State<IntroTab> {
               ),
             ),
             Container(
-              margin: EdgeInsets.fromLTRB(24.sp, 38.sp, 24.sp, 40.sp),
+              margin: EdgeInsets.fromLTRB(24.w, 38.h, 24.w, 40.h),
               child: Text(
                 widget.subTitle,
                 textAlign: TextAlign.center,
                 style: TextStyle(
+                  fontFamily: Constants.lato,
                   color: Colors.white.withOpacity(0.87),
                   fontSize: 16.sp,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class RegisterName extends StatefulWidget {
+  const RegisterName({Key? key}) : super(key: key);
+
+  @override
+  State<RegisterName> createState() => _RegisterNameState();
+}
+
+class _RegisterNameState extends State<RegisterName> {
+  var nameController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Color(0xff121212),
+      body: Center(
+        child: Column(
+          children: [
+            Container(
+              margin: EdgeInsets.fromLTRB(24.w, 58.h, 24.w, 0),
+              child: Text(
+                'Welcome to OneNote',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontFamily: Constants.lato,
+                  color: Colors.white.withOpacity(0.87),
+                  fontSize: 32.sp,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.fromLTRB(24.w, 26.h, 24.w, 0),
+              child: TextField(
+                controller: nameController,
+                textAlign: TextAlign.center,
+                onChanged: (value) {
+                  prefs().registerName(username: nameController.text);
+                },
+                style: TextStyle(
+                  fontFamily: Constants.lato,
+                  color: Colors.white.withOpacity(0.87),
+                  fontSize: 22.sp,
+                ),
+                decoration: InputDecoration(
+                  hintText: 'Tap to add your name',
+                  hintStyle: TextStyle(
+                    fontFamily: Constants.lato,
+                    color: Colors.white.withOpacity(0.67),
+                    fontSize: 16.sp,
+                  ),
+                  border: InputBorder.none,
                 ),
               ),
             ),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:list_todo/pages/home.dart';
-import 'package:list_todo/pages/splash_screen.dart';
+import 'package:one_note/pages/intro_page/splash_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -16,6 +15,7 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true,
       builder: (_) {
         return MaterialApp(
+          theme: ThemeData(),
           debugShowCheckedModeBanner: false,
           home: SplashScreen(),
         );

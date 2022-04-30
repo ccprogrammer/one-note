@@ -1,5 +1,5 @@
-name: list_todo
-description: A new Flutter project.
+name: one_note
+description: This is Note App !
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -68,11 +68,6 @@ flutter:
     - family: Lato
       fonts:
         - asset: assets/fonts/Lato/Lato-Regular.ttf
-
-    - family: Tapestry
-      fonts:
-        - asset: assets/fonts/Lato/Tapestry-Regular.ttf
-       
 
       
     

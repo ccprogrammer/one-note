@@ -1,14 +1,10 @@
-import 'dart:async';
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/src/size_extension.dart';
-import 'package:list_todo/helper/shared_preferences.dart';
-import 'package:list_todo/pages/home.dart';
-import 'package:list_todo/widgets/constants.dart';
-import 'package:list_todo/widgets/custom_button.dart';
+import 'package:one_note/controllers/shared_preferences.dart';
+import 'package:one_note/pages/home.dart';
+import 'package:one_note/widgets/constants.dart';
+import 'package:one_note/widgets/custom_button.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class IntroductionPage extends StatefulWidget {
   const IntroductionPage({Key? key}) : super(key: key);

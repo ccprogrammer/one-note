@@ -1,9 +1,9 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/src/size_extension.dart';
-import 'package:list_todo/pages/description_page.dart';
+import 'package:one_note/pages/description_page.dart';
 import 'package:intl/intl.dart';
-import 'package:list_todo/widgets/constants.dart';
+import 'package:one_note/widgets/constants.dart';
 
 class NoteTile extends StatefulWidget {
   const NoteTile({

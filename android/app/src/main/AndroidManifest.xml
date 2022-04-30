@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.list_todo">
+    package="com.ccp.OneNote">
    <application
-        android:label="list_todo"
+        android:label="OneNote"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/src/size_extension.dart';
-import 'package:list_todo/widgets/constants.dart';
+import 'package:one_note/widgets/constants.dart';
 
 class CustomInputTextField extends StatefulWidget {
   CustomInputTextField({

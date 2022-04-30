@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/src/size_extension.dart';
-import 'package:list_todo/widgets/custom_icon.dart';
-import 'package:list_todo/widgets/custom_input_textfield.dart';
+import 'package:one_note/widgets/custom_icon.dart';
+import 'package:one_note/widgets/custom_input_textfield.dart';
 
 class DescriptionPage extends StatefulWidget {
   DescriptionPage({

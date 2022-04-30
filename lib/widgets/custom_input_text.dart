@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:list_todo/widgets/constants.dart';
+import 'package:one_note/widgets/constants.dart';
 
 class CustomInputText extends StatefulWidget {
   const CustomInputText({

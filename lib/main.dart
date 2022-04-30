@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:list_todo/pages/intro_page/splash_screen.dart';
+import 'package:one_note/pages/intro_page/splash_screen.dart';
 
 void main() => runApp(MyApp());
 

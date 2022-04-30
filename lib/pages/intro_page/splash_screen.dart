@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/src/size_extension.dart';
-import 'package:list_todo/pages/home.dart';
-import 'package:list_todo/pages/intro_page/introduction_page.dart';
-import 'package:list_todo/widgets/constants.dart';
+import 'package:one_note/pages/home.dart';
+import 'package:one_note/pages/intro_page/introduction_page.dart';
+import 'package:one_note/widgets/constants.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

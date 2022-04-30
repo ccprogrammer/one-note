@@ -5,6 +5,8 @@ This is just a simple note app with bunch of animation and common feature Create
 
 
 
+https://user-images.githubusercontent.com/90954993/166099022-f121d1e4-53b2-4fa1-95d5-fd9edd8e0e0d.mp4
 
-https://user-images.githubusercontent.com/90954993/165338301-08029d67-60ed-412a-80a8-24ccac69ea3f.mp4
+
+
 

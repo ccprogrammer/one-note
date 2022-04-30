@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:one_note/widgets/constants.dart';
 
 class CustomInputText extends StatefulWidget {
   const CustomInputText({
@@ -31,10 +32,12 @@ class _CustomInputTextState extends State<CustomInputText> {
             widget.title,
             style: widget.expandField
                 ? TextStyle(
+                    fontFamily: Constants.lato,
                     color: Color(0xffAFAFAF),
                     fontSize: 18,
                   )
                 : TextStyle(
+                    fontFamily: Constants.lato,
                     color: Colors.white,
                     fontSize: 20,
                     fontWeight: FontWeight.w500,
@@ -60,6 +63,7 @@ class _CustomInputTextState extends State<CustomInputText> {
                     widget.onPressed();
                   },
                   style: TextStyle(
+                    fontFamily: Constants.lato,
                     color: Colors.white,
                   ),
                   decoration: InputDecoration(
@@ -82,6 +86,7 @@ class _CustomInputTextState extends State<CustomInputText> {
                     widget.onPressed();
                   },
                   style: TextStyle(
+                    fontFamily: Constants.lato,
                     color: Colors.white,
                   ),
                   decoration: InputDecoration(

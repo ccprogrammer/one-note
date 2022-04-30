@@ -1,19 +1,18 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:math';
 
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
-import 'package:list_todo/controllers/note_controller.dart';
-import 'package:list_todo/pages/add_description_page.dart';
-import 'package:list_todo/pages/description_page.dart';
-import 'package:list_todo/widgets/custom_button.dart';
-import 'package:list_todo/widgets/custom_input_text.dart';
-import 'package:list_todo/widgets/note_tile.dart';
+import 'package:flutter_screenutil/src/size_extension.dart';
+import 'package:one_note/controllers/note_controller.dart';
+import 'package:one_note/controllers/shared_preferences.dart';
+import 'package:one_note/pages/add_description_page.dart';
+import 'package:one_note/widgets/constants.dart';
+import 'package:one_note/widgets/custom_button.dart';
+import 'package:one_note/widgets/note_tile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class AppHome extends StatefulWidget {
   AppHome({Key? key}) : super(key: key);
@@ -23,46 +22,93 @@ class AppHome extends StatefulWidget {
 }
 
 class _AppHomeState extends State<AppHome> {
-  // jika panelIsOpen/true ketika klik kembali pada back button hp akan menjalankan function _panel.close()/tutup panel jika false akan kembail ke halaman sebelumnya
-  // bool exit = false;
-
   // Controller
   final c = NoteControler();
+  final _panelC = PanelController();
   final textNote = TextEditingController();
   final textDesc = TextEditingController();
+  final textUsername = TextEditingController();
+
+  List greetingList = [
+    {'value': 'Hi, '},
+    {'value': 'Hello, '},
+    {'value': 'What\'s up, '},
+  ];
+  String greetings = 'Hi';
+
+  List noteIcon = [
+    {
+      'value': 'assets/category/noteicon_playstation.png',
+    },
+    {
+      'value': 'assets/category/noteicon_movie.png',
+    },
+    {
+      'value': 'assets/category/noteicon_home.png',
+    },
+    {
+      'value': 'assets/category/noteicon_health.png',
+    },
+    {
+      'value': 'assets/category/noteicon_music.png',
+    },
+    {
+      'value': 'assets/category/noteicon_social.png',
+    },
+    // {
+    //   'value': 'assets/category/noteicon_university.png',
+    // },
+    {
+      'value': 'assets/category/noteicon_sport.png',
+    },
+    {
+      'value': 'assets/category/noteicon_work.png',
+    },
+    {
+      'value': 'assets/category/noteicon_grocery.png',
+    },
+  ];
+  int? noteIndex;
+
+  double onPanelOpenHeight = 0.16;
 
   @override
   void initState() {
     super.initState();
+    randomGreetings();
+    loadUsername();
     loadData();
   }
 
   // Shared Preferences Section
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
-  Future saveData() async {
-    final SharedPreferences prefs = await _prefs;
-    List notes = c.noteList;
-    prefs.setString('notes', jsonEncode(notes));
-    setState(() {});
+  void loadUsername() {
+    prefs().loadUsername(
+      username: (name) {
+        textUsername.text = name;
+      },
+    ).then((_) {
+      setState(() {});
+    });
   }
 
-  Future loadData() async {
-    final SharedPreferences prefs = await _prefs;
-    if (prefs.containsKey('notes')) {
-      final noteList = prefs.getString('notes');
-      final notes = jsonDecode(noteList!);
-      for (var i = 0; i < notes.length; i++) {
-        c.noteList.add(notes[i]);
-        setState(() {});
-      }
-    }
+  void randomGreetings() {
+    greetings = greetingList[Random().nextInt(greetingList.length)]['value'];
   }
 
-  Future deleteData() async {
-    final SharedPreferences prefs = await _prefs;
-    prefs.clear();
-    saveData();
+  void saveData() {
+    prefs().saveData(data: c.noteList);
+  }
+
+  void loadData() {
+    prefs()
+        .loadData(
+      noteList: c.noteList,
+    )
+        .then((_) {
+      setState(() {});
+    });
   }
 
 // Handler
@@ -73,99 +119,168 @@ class _AppHomeState extends State<AppHome> {
       desc,
     );
     saveData();
+    setState(() {});
   }
 
   void handleEdit(i, title, desc) {
     c.editNote(i, title, desc);
     saveData();
+    setState(() {});
   }
 
   void handleDelete(id) {
     c.deleteNote(id);
-    deleteData();
+    saveData();
+    setState(() {});
+  }
+
+  void handleChangeIcon(value) {
+    c.addNoteIcon(noteIndex, value);
+    saveData();
+    setState(() {});
+  }
+
+  void handlePanelOpenHeight(bool open) {
+    open == true ? onPanelOpenHeight = 0.65 : onPanelOpenHeight = 0.16;
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    // Size
-    var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
-
-    return Scaffold(
-      backgroundColor: Color(0xff121212),
-      appBar: AppBar(
-        centerTitle: true,
-        elevation: 0,
-        toolbarHeight: 65,
+    return WillPopScope(
+      onWillPop: () async {
+        if (_panelC.isPanelOpen) {
+          _panelC.close();
+          return false;
+        } else {
+          return true;
+        }
+      },
+      child: Scaffold(
         backgroundColor: Color(0xff121212),
-        title: Text(
-          'NOTE',
-          style: TextStyle(
-            fontSize: 22,
-          ),
-        ),
-      ),
-      body: Stack(
-        children: [
-          ListView(
+        appBar: _buildAppBar(),
+        body: GestureDetector(
+          onTap: () {
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
+          child: Stack(
             children: [
-              Column(
-                children: [
-                  for (var i = 0; i < c.noteList.length; i++) _buildNoteList(i),
-                  SizedBox(height: height * 0.13),
-                ],
-              ),
+              _buildNoteList(),
+              _buildBottomButton(),
+              _buildSlidingUpPanel(),
             ],
           ),
-
-          Positioned(
-            bottom: 24,
-            right: 24,
-            child: OpenContainer(
-              transitionDuration: Duration(milliseconds: 650),
-              openColor: Color(0xff8687E7),
-              closedColor: Color(0xff8687E7),
-              tappable: false,
-              closedBuilder: (context, action) {
-                return CustomButton(
-                  width: width * 0.13,
-                  title: 'Add',
-                  titleColor: Colors.white,
-                  isIcon: true,
-                  icon: Icons.add,
-                  onPressed: () {
-                    action();
-                  },
-                );
-              },
-              openBuilder: (context, action) {
-                return AddDescriptionPage(
-                  onSaveData: (title, desc) {
-                    handleAdd(title, desc);
-                  },
-                );
-              },
-            ),
-          )
-
-          // SlidingUpPanel(
-          //   controller: _panelC,
-          //   maxHeight: height * 0.5,
-          //   minHeight: 1,
-          //   onPanelClosed: () {
-          //     clearTextField();
-          //   },
-          //   color: Colors.transparent,
-          //   panel: _buildPanel(context),
-          // ),
-        ],
+        ),
       ),
     );
   }
 
-  Widget _buildNoteList(i) {
+  PreferredSizeWidget _buildAppBar() {
+    return AppBar(
+      centerTitle: false,
+      elevation: 0,
+      toolbarHeight: 100.h,
+      backgroundColor: Color(0xff121212),
+      titleSpacing: 24.w,
+      title: Row(
+        children: [
+          Text(
+            greetings,
+            style: TextStyle(
+              fontFamily: Constants.lato,
+              fontSize: 22.sp,
+            ),
+          ),
+          Expanded(
+            child: TextField(
+              textAlignVertical: TextAlignVertical.bottom,
+              controller: textUsername,
+              maxLength: 16,
+              onChanged: (value) {
+                prefs().registerName(username: textUsername.text);
+              },
+              style: TextStyle(
+                fontSize: 22.sp,
+                fontFamily: Constants.lato,
+                color: Colors.white,
+                fontWeight: FontWeight.w500,
+              ),
+              decoration: InputDecoration(
+                hintText: 'What\'s your name?',
+                hintStyle: TextStyle(
+                  color: Color(0xffB2B2B2),
+                ),
+                border: InputBorder.none,
+                counterText: '',
+              ),
+            ),
+          ),
+        ],
+      ),
+      actions: [],
+    );
+  }
+
+  Widget _buildNoteList() {
+    if (c.noteList.length > 0) {
+      return ListView(
+        children: [
+          Column(
+            children: [
+              for (var i = 0; i < c.noteList.length; i++) _buildNotes(i),
+              SizedBox(
+                  height:
+                      MediaQuery.of(context).size.height * onPanelOpenHeight),
+            ],
+          ),
+        ],
+      );
+    } else {
+      return Center(
+        child: Column(
+          children: [
+            Container(
+              margin: EdgeInsets.fromLTRB(0, 75.h, 0, 0),
+              width: 227.w,
+              height: 227.w,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/image_empty.png'),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            Container(
+              child: Text(
+                'What do you want to note?',
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20.sp,
+                ),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.fromLTRB(0, 10.h, 0, 0),
+              child: Text(
+                'Tap + to add your note',
+                style: TextStyle(
+                  color: Colors.white70,
+                  fontSize: 16.sp,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+  }
+
+  Widget _buildNotes(i) {
     return Container(
-      padding: EdgeInsets.fromLTRB(0, 6, 0, 0),
+      padding: EdgeInsets.fromLTRB(0, 6.h, 0, 0),
       // Slidable agar list bisa di swipe dan ini dari package flutter_slidable
       child: Slidable(
         key: ValueKey(
@@ -203,102 +318,160 @@ class _AppHomeState extends State<AppHome> {
           onSaveData: (title, desc) {
             handleEdit(i, title, desc);
           },
+          changeIcon: (_) {
+            noteIndex = i;
+            _panelC.open();
+          },
         ),
       ),
     );
   }
-/*
-  Widget _buildPanel(context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Color(0xff363636),
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(16),
-        ),
-      ),
-      width: double.infinity,
-      child: Column(
-        children: [
-          Expanded(
-            child: Column(
-              // controller: controller,
-              children: [
-                CustomInputText(
-                  onPressed: () {
-                    handleAdd();
-                  },
-                  expandField: false,
-                  title: 'Title',
-                  controller: textNote,
-                ),
-                CustomInputText(
-                  onPressed: () {
-                    handleAdd();
-                  },
-                  expandField: true,
-                  title: 'Description',
-                  controller: textDesc,
-                ),
-              ],
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.fromLTRB(24, 0, 24, 30),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                CustomButton(
-                  height: 48,
-                  width: 154,
-                  title: 'Cancel',
-                  margin: EdgeInsets.fromLTRB(0, 12, 0, 0),
-                  buttonColor: Colors.transparent,
-                  borderColor: Colors.red,
-                  onPressed: () {
-                    handleCancel();
-                  },
-                ),
-                CustomButton(
-                  height: 48,
-                  width: 154,
-                  title: 'Add',
-                  margin: EdgeInsets.fromLTRB(0, 12, 0, 0),
-                  buttonColor: Color(0xff8687E7),
-                  onPressed: () {
-                    handleAdd();
-                  },
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-*/
-// function untuk kalo pake panel
-  // void handleAdd() {
-  //   c.addNote(
-  //     Random().nextInt(100),
-  //     textNote.text,
-  //     textDesc.text,
-  //   );
-  //   saveData();
-  //   _panelC.close();
-  //   setState(() {});
 
-  //   // dismiss keyboard on complete
-  //   FocusScopeNode currentFocus = FocusScope.of(context);
-  //   if (!currentFocus.hasPrimaryFocus) {
-  //     currentFocus.unfocus();
-  //   }
-  // }
-  // void handlePopPanel() {
-  //   if (_panelC.isPanelOpen) {
-  //     _panelC.close();
-  //   } else {
-  //     // ketika panel terbuka panel akan di tutup, ketika panel tertutup this.exit akan menjadi true dan secara otomatis akan kembail ke halaman sebelumnya
-  //     this.exit = true;
-  //   }
-  // }
+  Widget _buildBottomButton() {
+    return Positioned(
+      bottom: 36.h,
+      right: 36.w,
+      child: OpenContainer(
+        transitionDuration: Duration(milliseconds: 650),
+        openColor: Color(0xff8687E7),
+        closedColor: Color(0xff8687E7),
+        tappable: false,
+        closedBuilder: (context, action) {
+          return CustomButton(
+            width: 50.w,
+            title: 'Add',
+            titleColor: Colors.white,
+            isIcon: true,
+            icon: Icons.add,
+            onPressed: () {
+              action();
+            },
+          );
+        },
+        openBuilder: (context, action) {
+          return AddDescriptionPage(
+            onSaveData: (title, desc) {
+              handleAdd(title, desc);
+            },
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildPanel({context, controller, changeNoteIcon}) {
+    return Stack(
+      children: [
+        Container(
+          width: double.infinity,
+          child: Column(
+            children: [
+              Container(
+                alignment: Alignment.center,
+                margin: EdgeInsets.fromLTRB(0.w, 10.h, 0.w, 0.w),
+                child: Text(
+                  'Choose Category',
+                  style: TextStyle(
+                    fontSize: 20.sp,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.fromLTRB(5.w, 10.h, 5.w, 10.h),
+                child: Divider(
+                  color: Color(0xff979797),
+                  thickness: 2.h,
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  margin: EdgeInsets.fromLTRB(30.w, 0, 30.w, 0),
+                  child: ListView(
+                    controller: controller,
+                    children: [
+                      GridView.builder(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          crossAxisSpacing: 35.w,
+                          mainAxisSpacing: 35.h,
+                          // mainAxisExtent: 80,
+                        ),
+                        primary: false,
+                        shrinkWrap: true,
+                        itemCount: noteIcon.length,
+                        itemBuilder: (context, index) {
+                          return Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage(
+                                  noteIcon[index]['value'],
+                                ),
+                              ),
+                            ),
+                            child: Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                onTap: () {
+                                  changeNoteIcon(noteIcon[index]['value']);
+                                },
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                      SizedBox(height: 30.h),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Positioned(
+          bottom: 24.h,
+          left: 24.w,
+          right: 24.w,
+          child: CustomButton(
+            title: 'Close',
+            style: TextStyle(
+              fontSize: 18,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              _panelC.close();
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSlidingUpPanel() {
+    return SlidingUpPanel(
+      controller: _panelC,
+      minHeight: 0,
+      onPanelOpened: () {
+        handlePanelOpenHeight(true);
+      },
+      onPanelClosed: () {
+        handlePanelOpenHeight(false);
+      },
+      panelSnapping: false,
+      color: Color(0xff363636),
+      borderRadius: BorderRadius.vertical(
+        top: Radius.circular(16),
+      ),
+      panelBuilder: (controller) {
+        return _buildPanel(
+          context: context,
+          controller: controller,
+          changeNoteIcon: (value) {
+            handleChangeIcon(value);
+          },
+        );
+      },
+    );
+  }
 }

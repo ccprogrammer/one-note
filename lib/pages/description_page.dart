@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:list_todo/widgets/custom_icon.dart';
-import 'package:list_todo/widgets/custom_input_textfield.dart';
+import 'package:flutter_screenutil/src/size_extension.dart';
+import 'package:one_note/widgets/custom_icon.dart';
+import 'package:one_note/widgets/custom_input_textfield.dart';
 
 class DescriptionPage extends StatefulWidget {
   DescriptionPage({
@@ -74,7 +75,7 @@ class _DescriptionPageState extends State<DescriptionPage> {
                   Navigator.pop(context);
                 },
                 icon: Icons.close,
-                margin: EdgeInsets.fromLTRB(24, 0, 0, 0),
+                margin: EdgeInsets.fromLTRB(24.w, 0, 0, 0),
               ),
               save
                   ? CustomIcon(
@@ -83,52 +84,47 @@ class _DescriptionPageState extends State<DescriptionPage> {
                         removeFocus();
                       },
                       icon: Icons.check,
-                      margin: EdgeInsets.fromLTRB(0, 0, 24, 0),
+                      margin: EdgeInsets.fromLTRB(0, 0, 24.w, 0),
                     )
                   : Container(),
             ],
           ),
         ),
-        body: GestureDetector(
-          onTap: () {
-            removeFocus();
-          },
-          child: ListView(
-            children: [
-              // Title TextField
-              Container(
-                margin: EdgeInsets.fromLTRB(24, 0, 24, 0),
-                child: Focus(
-                  onFocusChange: (focus) {
-                    onFocusChange();
-                  },
-                  child: CustomInputTextField(
-                    controller: textNote,
-                    hintText: 'Title',
-                    color: Colors.white54,
-                    fontSize: 26,
-                  ),
+        body: ListView(
+          children: [
+            // Title TextField
+            Container(
+              margin: EdgeInsets.fromLTRB(24.w, 0, 24.w, 0),
+              child: Focus(
+                onFocusChange: (focus) {
+                  onFocusChange();
+                },
+                child: CustomInputTextField(
+                  controller: textNote,
+                  hintText: 'Title',
+                  color: Colors.white54,
+                  fontSize: 26.sp,
                 ),
               ),
+            ),
 
-              // Description TextField
-              Container(
-                alignment: Alignment.centerLeft,
-                margin: EdgeInsets.fromLTRB(24, 6, 24, 18),
-                child: Focus(
-                  onFocusChange: (focus) {
-                    onFocusChange();
-                  },
-                  child: CustomInputTextField(
-                    controller: textDesc,
-                    hintText: 'Description',
-                    color: Colors.white38,
-                    fontSize: 16,
-                  ),
+            // Description TextField
+            Container(
+              alignment: Alignment.centerLeft,
+              margin: EdgeInsets.fromLTRB(24.w, 6.h, 24.w, 18.h),
+              child: Focus(
+                onFocusChange: (focus) {
+                  onFocusChange();
+                },
+                child: CustomInputTextField(
+                  controller: textDesc,
+                  hintText: 'Description',
+                  color: Colors.white38,
+                  fontSize: 16.sp,
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

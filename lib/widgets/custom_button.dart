@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/src/size_extension.dart';
+import 'package:one_note/widgets/constants.dart';
 
 class CustomButton extends StatefulWidget {
   const CustomButton({
@@ -7,23 +9,27 @@ class CustomButton extends StatefulWidget {
     this.width,
     this.title,
     this.margin,
+    this.padding,
     this.buttonColor,
     this.borderColor,
     this.titleColor,
     this.isIcon = false,
     this.icon,
     required this.onPressed,
+    this.style,
   }) : super(key: key);
   final double? height;
   final double? width;
   final String? title;
   final Color? titleColor;
   final EdgeInsets? margin;
+  final EdgeInsets? padding;
   final Color? borderColor;
   final Color? buttonColor;
   final Function onPressed;
   final bool isIcon;
   final IconData? icon;
+  final TextStyle? style;
 
   @override
   State<CustomButton> createState() => _CustomButtonState();
@@ -34,16 +40,20 @@ class _CustomButtonState extends State<CustomButton> {
   Widget build(BuildContext context) {
     return Container(
       margin: widget.margin,
-      height: widget.height ?? MediaQuery.of(context).size.height * 0.065,
+      padding: widget.padding,
+      height: widget.height ?? 50.h,
       width: widget.width ?? double.infinity,
-      decoration: BoxDecoration(
-        color: widget.buttonColor ?? Color(0xff8687E7),
-        border: Border.all(
-          color: widget.borderColor ?? Color(0xff8687E7),
-        ),
-        borderRadius: BorderRadius.circular(4),
-      ),
       child: TextButton(
+        style: TextButton.styleFrom(
+          backgroundColor: widget.buttonColor ?? Color(0xff8687E7),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4.r),
+          ),
+          side: BorderSide(
+            color: widget.borderColor ?? Color(0xff8687E7),
+            width: 1.w,
+          ),
+        ),
         onPressed: () {
           widget.onPressed();
         },
@@ -51,14 +61,16 @@ class _CustomButtonState extends State<CustomButton> {
             ? Icon(
                 widget.icon,
                 color: Colors.white,
-                size: 30,
+                size: 30.w,
               )
             : Text(
-                widget.title ?? '',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: widget.titleColor ?? Colors.white,
-                ),
+                widget.title ?? 'onPressed',
+                style: widget.style ??
+                    TextStyle(
+                      fontFamily: Constants.lato,
+                      fontSize: 16.sp,
+                      color: widget.titleColor ?? Colors.white,
+                    ),
               ),
       ),
     );
